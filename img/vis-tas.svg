@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70 -20 618 150" role="img" aria-label="VIS_TAS">
+  <path d="M -40 100.6 H 508" fill="none" stroke="#a9aca6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  <path d="M -40 50 H 508" fill="none" stroke="#dd7a4c" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  <g fill="none" stroke="#eceee8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="5,5 31,95 57,5"/>
+    <path d="M 91 5 V 95"/>
+    <path d="M 164.09 13.04 A 21 22.5 0 1 0 148 50 A 23 22.5 0 1 1 130.38 86.96"/>
+    <path d="M 253 5 H 303 M 278 5 V 95"/>
+    <path d="M 329 95 L 355 5 L 381 95 M 342 50 H 368"/>
+    <path d="M 456.09 13.04 A 21 22.5 0 1 0 440 50 A 23 22.5 0 1 1 422.38 86.96"/>
+  </g>
+  <path d="M 207 105 H 242" fill="none" stroke="#dd7a4c" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="224.5" cy="50" r="6.5" fill="#dd7a4c"/>
+</svg>

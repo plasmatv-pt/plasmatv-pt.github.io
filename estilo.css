@@ -1,0 +1,215 @@
+/* plasmatv.pt — estilo
+   Duas cenas: a noite (o estúdio, o ecrã) e o ocre (o palco, herdado do plasmateatro.pt).
+   As letras vêm com o site (scripts/build.mjs copia-as para /fontes/). */
+
+@font-face {
+  font-family: "Comfortaa";
+  src: url("/fontes/comfortaa-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 300 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alexandria";
+  src: url("/fontes/alexandria-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fontes/dm-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --noite: #15131c;
+  --noite-2: #1d1a27;
+  --tinta: #eceaf2;
+  --tinta-2: #c9c5d6;
+  --sombra: #8c879a;
+  --ocre: #c8860a;
+  --lilas: #a99cff;
+  --barro: #0e0c08;
+  --linha: #2e2b3a;
+
+  --f-titulo: "Comfortaa", "Alexandria", system-ui, sans-serif;
+  --f-texto: "Alexandria", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-maquina: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --largura: 68rem;
+  --coluna: 40rem;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* O lugar da barra de deslocamento fica sempre reservado: sem isto, no Windows, as páginas compridas
+   estreitavam a janela e o logótipo e o menu saltavam de lado ao mudar de página. */
+html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
+
+/* A passagem entre páginas (src/transicao.js): até a dissolução começar, a página nova fica tapada pela sua cor. */
+html.a-entrar body::after { content: ""; position: fixed; inset: 0; background: inherit; z-index: 2147483647; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--noite);
+  color: var(--tinta);
+  font-family: var(--f-texto);
+  font-weight: 300;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--lilas); outline-offset: 3px; border-radius: 2px; }
+em { font-style: italic; }
+img, svg { max-width: 100%; height: auto; }
+
+.saltar {
+  position: absolute; left: 1rem; top: -4rem;
+  background: var(--tinta); color: var(--noite);
+  padding: 0.5rem 1rem; z-index: 10;
+}
+.saltar:focus { top: 1rem; }
+
+.envoltorio {
+  width: 100%;
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+}
+
+/* ——— topo ——— */
+.topo .envoltorio {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 1rem 2rem; padding-block: 1.25rem;
+}
+.marca { display: block; line-height: 0; }
+.marca img { width: 7.5rem; filter: invert(1); }
+.nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-size: 0.95rem; }
+.nav a { text-decoration: none; color: var(--tinta-2); padding-block: 0.25rem; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--tinta); text-decoration: underline; }
+
+main { flex: 1; }
+
+/* ——— rodapé ——— */
+.rodape { font-family: var(--f-maquina); font-size: 0.8rem; color: var(--sombra); }
+.rodape .envoltorio {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; padding-block: 1.5rem 2rem;
+  border-top: 1px solid var(--linha);
+}
+.rodape a { color: var(--tinta-2); }
+
+/* ——— títulos e texto ——— */
+h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; text-wrap: balance; margin: 0; }
+.cabeca { padding-block: 3.5rem 1.5rem; }
+.cabeca h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); }
+.cabeca p { color: var(--tinta-2); max-width: var(--coluna); margin: 1rem 0 0; }
+.coluna { max-width: var(--coluna); }
+.coluna p { margin: 0 0 1.1em; }
+.seccao { padding-block: 1.5rem; }
+.seccao h2 {
+  font-family: var(--f-maquina); font-weight: 400; font-size: 0.78rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--sombra);
+  padding-top: 1rem; margin-bottom: 1rem; border-top: 1px solid var(--linha);
+}
+
+/* ——— início ——— */
+.inicio {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; align-items: center; min-height: min(78vh, 46rem);
+}
+.inicio canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.inicio .envoltorio { padding-block: 3rem 4rem; }
+.lema {
+  font-family: var(--f-titulo); font-weight: 400; margin: 0;
+  font-size: clamp(2.1rem, 7.2vw, 4.4rem); line-height: 1.06; letter-spacing: 0.005em;
+}
+.lema .palco { color: var(--ocre); }
+.lema .ecra { color: var(--lilas); }
+.bio { margin: 1.75rem 0 0; font-size: 1.12rem; line-height: 1.55; max-width: 34rem; }
+.bio .codigo { display: block; margin-top: 0.5rem; font-family: var(--f-maquina); font-size: 0.95rem; color: var(--tinta-2); }
+.bio .codigo b { font-weight: 400; color: var(--lilas); }
+.portas { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1.5rem 2.5rem; margin-top: 2.25rem; }
+.familia { display: grid; justify-items: start; gap: 0.7rem; }
+.familia-nome { font-family: var(--f-maquina); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.familia.palco .familia-nome { color: var(--ocre); }
+.familia.ecra .familia-nome { color: var(--lilas); }
+.porta {
+  display: grid; gap: 0.1rem; padding: 0.8rem 1.4rem 0.85rem;
+  border: 1px solid currentColor; border-radius: 999px; text-decoration: none;
+}
+.porta small { font-family: var(--f-maquina); font-size: 0.74rem; opacity: 0.8; }
+.porta.palco { color: var(--ocre); }
+.porta.ecra { color: var(--lilas); }
+.porta:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+
+/* ——— palco (teatro) ——— */
+body.palco { background: var(--ocre); color: var(--barro); color-scheme: light; }
+body.palco .marca img { filter: none; }
+body.palco .nav a { color: var(--barro); opacity: 0.78; }
+body.palco .nav a:hover, body.palco .nav a[aria-current="page"] { opacity: 1; }
+body.palco .rodape, body.palco .rodape a { color: var(--barro); }
+body.palco .rodape .envoltorio { border-top-color: rgba(14, 12, 8, 0.3); }
+body.palco .seccao h2 { color: var(--barro); border-top-color: rgba(14, 12, 8, 0.3); }
+body.palco :focus-visible { outline-color: var(--barro); }
+body.palco .cabeca p { color: var(--barro); }
+.logo-teatro { width: min(22rem, 72%); margin: 0.75rem 0 2rem; color: var(--barro); }
+.logo-teatro svg { display: block; width: 100%; height: auto; fill: currentColor; }
+.abertura { font-size: 1.2rem; line-height: 1.55; }
+.espacado { white-space: nowrap; letter-spacing: 0.02em; }
+.lista { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 0.6rem 1rem; margin: 0; }
+.lista dt { font-family: var(--f-titulo); font-weight: 700; }
+.lista dd { margin: 0; }
+
+/* ——— ecrã ——— */
+.cabeca.ecra h1 { color: var(--lilas); }
+.obras { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; max-width: var(--coluna); }
+.obra { display: grid; gap: 0.3rem; padding-block: 1.25rem; border-top: 1px solid var(--linha); }
+.obra .tipo { font-family: var(--f-maquina); font-size: 0.74rem; letter-spacing: 0.08em; color: var(--sombra); text-transform: uppercase; }
+.obra h2 { font-size: 1.35rem; font-weight: 700; }
+.obra .sinal { width: min(14rem, 70%); margin: 0.6rem 0 0.4rem; display: block; }
+.obra p { margin: 0; color: var(--tinta-2); }
+.obra .estado { font-family: var(--f-maquina); font-size: 0.78rem; color: var(--sombra); }
+
+/* ——— epas ——— */
+.epas { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.epas b { font-weight: 500; }
+
+@media (max-width: 34rem) {
+  .lista { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
+  .lista dd { margin-bottom: 0.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* ——— labarta ——— */
+.cabeca.labarta .convite { color: var(--sombra); }
+.logo-labarta { display: block; width: min(15rem, 60%); margin: 0.5rem 0 1rem; filter: invert(1); }
+.album {
+  display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1rem 2rem;
+  padding-block: 1.5rem; border-top: 1px solid var(--linha); max-width: 56rem;
+}
+.album:first-of-type { border-top: 0; padding-top: 0; }
+.album .capa { width: 100%; height: auto; display: block; }
+.album-texto { min-width: 0; max-width: var(--coluna); }
+.album h3 { font-size: 1.6rem; font-weight: 700; }
+.album p { margin: 0 0 0.9em; }
+.album .data { font-family: var(--f-maquina); font-size: 0.8rem; color: var(--sombra); margin: 0.35rem 0 1rem; }
+.creditos-titulo { font-family: var(--f-maquina); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sombra); margin: 1.25rem 0 0.4rem !important; }
+.creditos { list-style: none; padding: 0; margin: 0 0 1rem; font-family: var(--f-maquina); font-size: 0.85rem; color: var(--tinta-2); }
+.ouvir, .ligacoes a { color: var(--lilas); }
+.em-preparacao { font-family: var(--f-maquina); font-size: 0.85rem; color: var(--sombra); margin: 0.5rem 0 0; }
+.ligacoes { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
+
+@media (max-width: 40rem) {
+  .album { grid-template-columns: minmax(0, 1fr); }
+  .album .capa { max-width: 20rem; }
+}
