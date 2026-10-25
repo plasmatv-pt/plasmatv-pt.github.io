@@ -71,22 +71,25 @@ html.a-entrar body::before { animation: chuvisco-salta 0.3s steps(1) infinite, c
 html.a-entrar body::after { animation: faixas-rolam 0.7s linear infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
 
 /* A troca de língua (o Jesús, 25.10.2026): sem chuvisco, que era forte demais para isto. Os textos (o corpo, o menu, a
-   língua e o rodapé) desfocam-se, e a outra língua chega como uma estação de rádio a ser sintonizada: desfocada,
-   tremida e com as cores desencontradas, até assentar. O logótipo e as cores ficam onde estão. */
+   língua e o rodapé) desfocam-se, e a outra língua chega como uma estação de rádio a ser sintonizada: desfocada
+   aos solavancos e com as cores desencontradas, até assentar. O logótipo e as cores ficam onde estão. */
 html.a-dessintonizar main, html.a-dessintonizar .nav-itens, html.a-dessintonizar .linguas summary, html.a-dessintonizar .rodape .envoltorio {
   filter: blur(6px); opacity: 0.25; transition: filter 0.22s ease-in, opacity 0.22s ease-in;
 }
 html.a-sintonizar main, html.a-sintonizar .nav-itens, html.a-sintonizar .linguas summary, html.a-sintonizar .rodape .envoltorio {
   animation: sintoniza 0.65s ease-out both;
 }
+/* Sem empurrar o texto de lado: no telemóvel, uns píxeis a mais de largura faziam o ecrã encolher por instantes, e o
+   rodapé tremia (o Jesús, 25.10.2026). O tremor vem só das cores desencontradas e do desfocado aos solavancos. */
 @keyframes sintoniza {
-  0% { filter: blur(7px); opacity: 0.25; transform: translateX(3px); text-shadow: 3px 0 rgba(255, 90, 90, 0.55), -3px 0 rgba(90, 170, 255, 0.55); }
-  25% { filter: blur(2px); opacity: 0.85; transform: translateX(-2px); text-shadow: -2px 0 rgba(255, 90, 90, 0.45), 2px 0 rgba(90, 170, 255, 0.45); }
-  42% { filter: blur(4px); opacity: 0.6; transform: translateX(1.5px); text-shadow: 2px 0 rgba(255, 90, 90, 0.35), -2px 0 rgba(90, 170, 255, 0.35); }
-  62% { filter: blur(1px); opacity: 0.95; transform: translateX(-1px); text-shadow: -1px 0 rgba(255, 90, 90, 0.25), 1px 0 rgba(90, 170, 255, 0.25); }
-  80% { filter: blur(1.5px); opacity: 1; transform: translateX(0.5px); text-shadow: none; }
-  100% { filter: none; opacity: 1; transform: none; text-shadow: none; }
+  0% { filter: blur(7px); opacity: 0.25; text-shadow: 3px 0 rgba(255, 90, 90, 0.55), -3px 0 rgba(90, 170, 255, 0.55); }
+  25% { filter: blur(2px); opacity: 0.85; text-shadow: -2px 0 rgba(255, 90, 90, 0.45), 2px 0 rgba(90, 170, 255, 0.45); }
+  42% { filter: blur(4px); opacity: 0.6; text-shadow: 2px 0 rgba(255, 90, 90, 0.35), -2px 0 rgba(90, 170, 255, 0.35); }
+  62% { filter: blur(1px); opacity: 0.95; text-shadow: -1px 0 rgba(255, 90, 90, 0.25), 1px 0 rgba(90, 170, 255, 0.25); }
+  80% { filter: blur(1.5px); opacity: 1; text-shadow: none; }
+  100% { filter: none; opacity: 1; text-shadow: none; }
 }
+
 
 /* A entrada no site (o Jesús, 25.10.2026, afinada no mesmo dia): quando a página carrega inteira, ou seja, quando
    alguém chega de fora, por qualquer endereço do site (dentro do site, a página já não se recarrega). Começa em negro;
