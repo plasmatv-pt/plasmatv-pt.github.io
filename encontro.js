@@ -1,5 +1,8 @@
 // O encontro: duas famílias de pontos, ocres (o corpo, o palco) e lilases (o código, o ecrã).
-// As linhas desenham-se só entre um ponto de cada família, quando se aproximam. Entre iguais, nunca.
+// As ligações desenham-se só entre um ponto de cada família, quando se aproximam. Entre iguais, nunca.
+// São descargas, como numa lâmpada de plasma (o Jesús, 25.10.2026; já era assim no plasmateatro.pt): um arco partido
+// que treme ao acaso a cada imagem, com um halo por baixo, e que só aparece numa parte das imagens, por isso tremeluz.
+// Os pontos vagueiam um pouco, em vez de andarem a direito.
 // Com «reduzir movimento», desenha-se uma vez e fica quieto.
 // Carrega em todas as páginas: como a página não se desmonta (src/transicao.js), a constelação acorda quando se chega
 // à página inicial e adormece quando se sai dela (o aviso «plasmatv:pagina»).
@@ -38,12 +41,7 @@
       for (var j = 0; j < pts.length; j++) {
         var b = pts[j]; if (b.f !== 1) continue;
         var dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
-        if (d < D) {
-          var k = 1 - d / D, g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-          g.addColorStop(0, cor(OCRE, 0.55 * k)); g.addColorStop(1, cor(LILAS, 0.55 * k));
-          ctx.strokeStyle = g; ctx.lineWidth = 0.8;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        }
+        if (d < D && (calmo || Math.random() < TREMOR)) descarga(a, b, 1 - d / D);
       }
     }
     for (var m = 0; m < pts.length; m++) {
@@ -52,9 +50,33 @@
     }
   }
 
+  // Uma descarga entre dois pontos: um arco em sete troços, cada vértice desviado ao acaso (até 14 px), desenhado duas
+  // vezes, largo e ténue (o halo) e fino e vivo (o fio), com a cor a passar do ocre ao lilás.
+  var TROCOS = 7, DESVIO = 14, TREMOR = 0.3;
+  function descarga(a, b, k) {
+    var xs = [a.x], ys = [a.y];
+    for (var t = 1; t < TROCOS; t++) {
+      xs.push(a.x + (b.x - a.x) * t / TROCOS + (Math.random() - 0.5) * DESVIO);
+      ys.push(a.y + (b.y - a.y) * t / TROCOS + (Math.random() - 0.5) * DESVIO);
+    }
+    xs.push(b.x); ys.push(b.y);
+    [[3.4, 0.2], [1, 0.95]].forEach(function (camada) {
+      var g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+      g.addColorStop(0, cor(OCRE, camada[1] * k)); g.addColorStop(1, cor(LILAS, camada[1] * k));
+      ctx.strokeStyle = g; ctx.lineWidth = camada[0]; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(xs[0], ys[0]);
+      for (var n = 1; n < xs.length; n++) ctx.lineTo(xs[n], ys[n]);
+      ctx.stroke();
+    });
+  }
+
   function mover() {
     for (var i = 0; i < pts.length; i++) {
-      var p = pts[i]; p.x += p.vx; p.y += p.vy;
+      var p = pts[i];
+      // um vaguear leve: a direção roda um pouco ao acaso, e a velocidade fica sempre a mesma
+      var v = Math.sqrt(p.vx * p.vx + p.vy * p.vy) || 0.1, ang = Math.atan2(p.vy, p.vx) + (Math.random() - 0.5) * 0.12;
+      p.vx = Math.cos(ang) * v; p.vy = Math.sin(ang) * v;
+      p.x += p.vx; p.y += p.vy;
       if (p.x < 0 || p.x > W) p.vx *= -1;
       if (p.y < 0 || p.y > H) p.vy *= -1;
     }

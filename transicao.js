@@ -27,7 +27,7 @@
     raiz.classList.add('a-arrancar');
     var arrancou = function () { raiz.classList.remove('a-arrancar'); };
     document.addEventListener('animationend', function (e) { if (e.animationName === 'rodape-sobe') arrancou(); });
-    window.setTimeout(arrancou, 3000); // se as animações não chegarem a correr
+    window.setTimeout(arrancou, 3500); // se as animações não chegarem a correr
   }
 
   // Quando o chuvisco acaba de ir, tira-se.

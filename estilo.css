@@ -105,9 +105,10 @@ html.a-arrancar main > :not(.inicio), html.a-arrancar .inicio .envoltorio { anim
 /* O topo continua a sua volta do dia e da noite (a primeira animação, a mesma de sempre) enquanto desce. */
 html.a-arrancar .topo {
   z-index: 1003;
-  animation: dia-noite 90s ease-in-out var(--fase-dia, 0s) infinite, topo-desce 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 1.55s both;
+  animation: dia-noite 90s ease-in-out var(--fase-dia, 0s) infinite, topo-desce 1.3s cubic-bezier(0.33, 0, 0.2, 1) 1.55s both;
 }
-html.a-arrancar .rodape { z-index: 1003; animation: rodape-sobe 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 1.55s both; }
+/* As barras chegam devagar, sem pressa (o Jesús, 25.10.2026). */
+html.a-arrancar .rodape { z-index: 1003; animation: rodape-sobe 1.3s cubic-bezier(0.33, 0, 0.2, 1) 1.55s both; }
 @keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
 @keyframes topo-desce { from { translate: 0 -100%; } to { translate: 0 0; } }
 @keyframes rodape-sobe { from { translate: 0 100%; } to { translate: 0 0; } }
@@ -216,7 +217,7 @@ img, svg { max-width: 100%; height: auto; }
 }
 .linguas li a, .linguas li span { display: block; text-align: right; padding: 0.45rem 0.7rem; border-radius: 0.45rem; text-decoration: none; }
 .linguas li a:hover { background: rgba(255, 255, 255, 0.07); }
-.linguas li span { color: var(--lilas); text-decoration: underline; text-underline-offset: 0.2em; }
+.linguas li span { color: var(--tinta); font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; } /* a língua escolhida: branca, em negrito e sublinhada (o Jesús, 25.10.2026) */
 .linguas ul :focus-visible { outline-color: var(--lilas); }
 
 /* Em todos os ecrãs, o topo sobe e desaparece quando se desce a página, e volta quando se sobe; e, depois de descer,
@@ -409,7 +410,7 @@ html:not(.com-js) .contacto-form { display: none; }
 .enviar:hover { text-decoration: underline; }
 .contacto-form .aviso { margin: 0; color: var(--tinta-2); }
 .direto { color: var(--tinta-2); margin-top: 1.5rem; }
-.direto a, .aviso a { color: var(--lilas); }
+.direto a, .aviso a { color: var(--tinta); } /* em branco, como as ligações das outras páginas (o Jesús, 25.10.2026) */
 
 /* ——— teatro ——— */
 .abertura { font-size: 1.2rem; line-height: 1.55; }
@@ -513,6 +514,19 @@ html:not(.com-js) .contacto-form { display: none; }
   .album { grid-template-columns: minmax(0, 1fr); }
   .album .capa { max-width: 20rem; }
 }
+
+/* As imagens (logótipos, capas): sem o «guardar» do toque longo no telemóvel e sem se arrastarem (src/imagens.js mostra
+   o aviso de direitos). Não impede uma captura de ecrã: nada impede. */
+main img, .marca img { -webkit-touch-callout: none; -webkit-user-drag: none; user-select: none; }
+.aviso-direitos {
+  position: fixed; left: 50%; bottom: calc(var(--rodape-altura, 2.6rem) + 1rem); z-index: 1004;
+  transform: translate(-50%, 0.5rem); opacity: 0; pointer-events: none;
+  max-width: min(26rem, calc(100vw - 2rem)); padding: 0.6rem 1rem; border-radius: 0.6rem;
+  background: var(--noite-2); color: var(--tinta); border: 1px solid var(--linha);
+  font-family: var(--f-maquina); font-size: 0.78rem; text-align: center;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4); transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.aviso-direitos.visivel { opacity: 1; transform: translate(-50%, 0); }
 
 /* O campo escondido do formulário (servidor/formulario/index.php): fora da vista e do teclado; só os robôs o
    preenchem. */
