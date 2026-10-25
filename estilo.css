@@ -214,20 +214,20 @@ html.com-js .ao-topo.visivel { opacity: 1; visibility: visible; transform: none;
 .som { display: none; }
 html.com-js .som {
   display: inline-grid; place-items: center; padding: 0.3rem 0.2rem; cursor: pointer;
-  color: var(--barro); background: transparent; border: 2px solid transparent; border-radius: 0.55rem;
+  color: var(--barro); background: transparent; border: 0; border-radius: 0.4rem;
 }
 .som svg { display: block; width: 1.5rem; height: 1.5rem; }
 .som .som-calado, html.sem-som .som .som-ligado { display: none; }
 html.sem-som .som .som-calado { display: block; }
 
-/* Deitados (em paisagem, em qualquer ecrã), a língua e o som ficam em caixinhas, sem sublinhado; ao alto, ficam só as
-   letras sublinhadas e o ícone (o Jesús, 25.10.2026). */
+/* Deitados (em paisagem, em qualquer ecrã), a língua fica numa caixinha de tamanho fixo, seja PT, EN ou ES, sem
+   sublinhado; ao alto, ficam só as letras sublinhadas. O som nunca tem caixinha (o Jesús, 25.10.2026). */
 @media (orientation: landscape) {
-  .linguas summary { text-decoration: none; border: 2px solid var(--barro); border-radius: 0.55rem; padding: 0.4rem 0.5rem 0.35rem; }
+  .linguas summary {
+    display: grid; place-items: center; width: 2.6rem; height: 1.95rem; padding: 0;
+    text-decoration: none; border: 2px solid var(--barro); border-radius: 0.55rem;
+  }
   .linguas summary:hover, .linguas[open] summary { background: rgba(14, 12, 8, 0.1); }
-  html.com-js .som { padding: 0.15rem 0.3rem; border-color: var(--barro); }
-  html.com-js .som:hover { background: rgba(14, 12, 8, 0.1); }
-  .som svg { width: 1.2rem; height: 1.2rem; }
 }
 
 main { flex: 1; }

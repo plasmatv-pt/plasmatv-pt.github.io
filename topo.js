@@ -27,17 +27,28 @@
     });
   }
 
+  // Abrir e fechar as caixas soa a um tique discreto (src/som.js); o fecho automático, à chegada, não soa.
+  function soar(nome) { if (window.plasmatvSom) window.plasmatvSom.tocar(nome); }
+
   if (botao) botao.addEventListener('click', function () {
     var abrir = botao.getAttribute('aria-expanded') !== 'true';
     if (linguas) linguas.open = false;
     menu(abrir);
+    soar(abrir ? 'abrir' : 'fechar');
   });
+  if (linguas) linguas.querySelector('summary').addEventListener('click', function () { soar(linguas.open ? 'fechar' : 'abrir'); });
   if (linguas) linguas.addEventListener('toggle', function () { if (linguas.open) menu(false); });
 
   // Fecha-se com um toque fora do topo, ou com a tecla Esc (e o foco volta a quem abriu).
-  document.addEventListener('click', function (e) { if (!topo.contains(e.target)) fecharTudo(); });
+  function algoAberto() { return topo.classList.contains('aberto') || (linguas && linguas.open); }
+  document.addEventListener('click', function (e) {
+    if (topo.contains(e.target) || !algoAberto()) return;
+    fecharTudo();
+    soar('fechar');
+  });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (algoAberto()) soar('fechar');
     if (topo.classList.contains('aberto')) { menu(false); botao.focus(); }
     if (linguas && linguas.open) { linguas.open = false; linguas.querySelector('summary').focus(); }
   });
@@ -64,19 +75,12 @@
   }, { passive: true });
   topo.addEventListener('focusin', function () { topo.classList.remove('escondido'); });
 
-  // O som: ligado até alguém o desligar; a escolha fica na memória do separador (src/transicao.js lê-a à chegada).
+  // O som: ligado até alguém o desligar (src/som.js guarda a escolha na memória do separador e lê-a à chegada).
   var som = topo.querySelector('.som');
-  if (som) {
-    var raiz = document.documentElement;
-    som.setAttribute('aria-pressed', raiz.classList.contains('sem-som') ? 'false' : 'true');
+  if (som && window.plasmatvSom) {
+    som.setAttribute('aria-pressed', window.plasmatvSom.ligado() ? 'true' : 'false');
     som.addEventListener('click', function () {
-      var calar = !raiz.classList.contains('sem-som');
-      raiz.classList.toggle('sem-som', calar);
-      som.setAttribute('aria-pressed', calar ? 'false' : 'true');
-      try {
-        if (calar) sessionStorage.setItem('plasmatv:som', 'nao');
-        else sessionStorage.removeItem('plasmatv:som');
-      } catch (e) { /* sem memória: a escolha vale só nesta página */ }
+      som.setAttribute('aria-pressed', window.plasmatvSom.alternar() ? 'true' : 'false');
     });
   }
 
