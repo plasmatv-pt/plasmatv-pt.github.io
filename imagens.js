@@ -12,8 +12,7 @@
 
   function imagem(alvo) { return alvo && alvo.closest && alvo.closest('main img, .marca img'); }
 
-  // O aviso aparece por cima da própria imagem, ao centro dela (o Jesús, 25.10.2026); se não houver espaço por cima,
-  // fica junto ao cimo da imagem, por dentro, e nunca sai do ecrã.
+  // O aviso aparece pousado no meio da própria imagem (o Jesús, 25.10.2026), sem nunca sair do ecrã.
   function avisar(img) {
     if (!caixa) {
       caixa = document.createElement('div');
@@ -22,9 +21,10 @@
       document.body.appendChild(caixa);
     }
     caixa.textContent = AVISO[(document.documentElement.lang || 'pt').slice(0, 2)] || AVISO.pt;
-    var r = img.getBoundingClientRect(), metade = Math.min(caixa.offsetWidth / 2 + 8, window.innerWidth / 2);
-    var x = Math.min(Math.max(r.left + r.width / 2, metade), window.innerWidth - metade);
-    var y = Math.max(r.top - 8, caixa.offsetHeight + 8);
+    var r = img.getBoundingClientRect();
+    var meiaL = Math.min(caixa.offsetWidth / 2 + 8, window.innerWidth / 2), meiaA = Math.min(caixa.offsetHeight / 2 + 8, window.innerHeight / 2);
+    var x = Math.min(Math.max(r.left + r.width / 2, meiaL), window.innerWidth - meiaL);
+    var y = Math.min(Math.max(r.top + r.height / 2, meiaA), window.innerHeight - meiaA);
     caixa.style.left = x + 'px';
     caixa.style.top = y + 'px';
     caixa.classList.add('visivel');

@@ -519,15 +519,15 @@ html:not(.com-js) .contacto-form { display: none; }
    o aviso de direitos). Não impede uma captura de ecrã: nada impede. */
 main img, .marca img { -webkit-touch-callout: none; -webkit-user-drag: none; user-select: none; }
 .aviso-direitos {
-  /* por cima da própria imagem, ao centro dela (src/imagens.js põe o sítio) */
+  /* pousado no meio da própria imagem (src/imagens.js põe o sítio) */
   position: fixed; left: 50%; top: 50%; z-index: 1004;
-  transform: translate(-50%, calc(-100% + 0.5rem)); opacity: 0; pointer-events: none;
+  transform: translate(-50%, calc(-50% + 0.5rem)); opacity: 0; pointer-events: none;
   max-width: min(26rem, calc(100vw - 2rem)); padding: 0.6rem 1rem; border-radius: 0.6rem;
   background: var(--noite-2); color: var(--tinta); border: 1px solid var(--linha);
   font-family: var(--f-maquina); font-size: 0.78rem; text-align: center;
   box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4); transition: opacity 0.25s ease, transform 0.25s ease;
 }
-.aviso-direitos.visivel { opacity: 1; transform: translate(-50%, -100%); }
+.aviso-direitos.visivel { opacity: 1; transform: translate(-50%, -50%); }
 
 /* O campo escondido do formulário (servidor/formulario/index.php): fora da vista e do teclado; só os robôs o
    preenchem. */
