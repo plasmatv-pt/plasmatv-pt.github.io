@@ -193,8 +193,11 @@ img, svg { max-width: 100%; height: auto; }
   gap: 0.75rem 1.75rem; padding-block: 1rem;
 }
 .topo :focus-visible { outline-color: var(--barro); }
-.marca { display: block; margin-right: auto; line-height: 0; text-decoration: none; }
-.marca img { display: block; width: 8rem; }
+.marca { position: relative; display: block; margin-right: auto; line-height: 0; text-decoration: none; }
+.marca img { display: block; width: 8rem; transition: filter 0.3s ease; }
+/* O plasma no logótipo, ao passar o rato (src/marca.js): as descargas por cima das letras e um brilho ténue nelas. */
+.marca-plasma { position: absolute; left: -8px; top: -8px; width: calc(100% + 16px); height: calc(100% + 16px); pointer-events: none; }
+.marca.a-faiscar img { filter: drop-shadow(0 0 3px rgba(245, 240, 255, 0.55)); }
 .nav-itens { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-size: 0.95rem; }
 .nav a { text-decoration: none; color: var(--barro); font-weight: 400; padding-block: 0.25rem; }
 .nav a:hover, .nav a[aria-current="page"] { text-decoration: underline; }
