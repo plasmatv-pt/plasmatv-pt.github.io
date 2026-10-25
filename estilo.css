@@ -442,3 +442,7 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
   .album { grid-template-columns: minmax(0, 1fr); }
   .album .capa { max-width: 20rem; }
 }
+
+/* O campo escondido do formulário (servidor/formulario/index.php): fora da vista e do teclado; só os robôs o
+   preenchem. */
+.mel { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
