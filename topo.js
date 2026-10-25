@@ -19,6 +19,14 @@
     if (linguas) linguas.open = false;
   }
 
+  // Vindo de uma escolha no menu aberto (src/transicao.js), o menu chega aberto e fecha-se com o mesmo movimento com
+  // que abre, quando o chuvisco começa a ir-se.
+  if (document.documentElement.classList.contains('menu-vinha-aberto')) {
+    window.requestAnimationFrame(function () {
+      window.setTimeout(function () { document.documentElement.classList.remove('menu-vinha-aberto'); }, 160);
+    });
+  }
+
   if (botao) botao.addEventListener('click', function () {
     var abrir = botao.getAttribute('aria-expanded') !== 'true';
     if (linguas) linguas.open = false;

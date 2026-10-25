@@ -5,7 +5,8 @@
 //  - o chuvisco da saída não pára: fica vivo até a página nova chegar, por mais que demore;
 //  - a página nova já nasce com chuvisco (só CSS), sem esperar pelo JavaScript nem passar pelo negro.
 // Só entre páginas do próprio site, e nunca com «reduzir movimento». A única marca é uma linha na memória da sessão do
-// separador («vim de um clique interno»), que se apaga logo à chegada (a página da privacidade di-lo).
+// separador («vim de um clique interno», e se o menu do telemóvel estava aberto), que se apaga logo à chegada (a página
+// da privacidade di-lo).
 // Carrega no <head>, sem «defer», para pôr o chuvisco antes de a página se desenhar.
 (function () {
   var raiz = document.documentElement;
@@ -14,9 +15,11 @@
   var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var SAIDA = 240; // milissegundos até o chuvisco tapar tudo e se mudar de página
 
-  var vimDeDentro = false;
-  try { vimDeDentro = sessionStorage.getItem(CHAVE) === '1'; sessionStorage.removeItem(CHAVE); } catch (e) { /* sem memória: sem efeito */ }
-  if (vimDeDentro && !calmo) {
+  var marca = null;
+  try { marca = sessionStorage.getItem(CHAVE); sessionStorage.removeItem(CHAVE); } catch (e) { /* sem memória: sem efeito */ }
+  // Se a página foi escolhida no menu aberto, a nova começa com ele aberto; src/topo.js fecha-o devagar.
+  if (marca === 'menu') raiz.classList.add('menu-vinha-aberto');
+  if ((marca === '1' || marca === 'menu') && !calmo) {
     raiz.classList.add('a-entrar');
     // Tira-se quando o chuvisco acabar de ir (ou, se a animação não chegar a correr, ao fim de um segundo e meio).
     var acabar = function () { raiz.classList.remove('a-entrar'); };
@@ -61,7 +64,8 @@
     if (!destino) return;
     e.preventDefault();
     pedirCedo(destino);
-    try { sessionStorage.setItem(CHAVE, '1'); } catch (err) { /* sem memória: a página nova aparece sem chuvisco */ }
+    var menuAberto = !!document.querySelector('.topo.aberto');
+    try { sessionStorage.setItem(CHAVE, menuAberto ? 'menu' : '1'); } catch (err) { /* sem memória: a página nova aparece sem chuvisco */ }
     raiz.classList.add('a-sair');
     window.setTimeout(function () { window.location.href = destino.href; }, SAIDA);
   });
