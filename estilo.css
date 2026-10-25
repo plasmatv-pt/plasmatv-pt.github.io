@@ -48,7 +48,7 @@
 html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 
 /* A passagem entre páginas (src/transicao.js): até a dissolução começar, a página nova fica tapada pela sua cor. */
-html.a-entrar body::after { content: ""; position: fixed; inset: 0; background: inherit; z-index: 2147483647; }
+html.a-entrar body::after { content: ""; position: fixed; inset: 0; background: inherit; z-index: 1000; }
 
 body {
   margin: 0;
@@ -89,8 +89,32 @@ img, svg { max-width: 100%; height: auto; }
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
   gap: 1rem 2rem; padding-block: 1.25rem;
 }
-.marca { display: block; line-height: 0; }
-.marca img { width: 7.5rem; filter: invert(1); }
+.topo { position: relative; z-index: 1001; background: var(--noite); }
+
+/* O ecrã: o logótipo preto dentro de um ecrã de televisão antiga, com o dia e a noite a passarem devagar
+   (ocre e lilás), linhas de varrimento e uma faixa de luz que desce (o Jesús, 25.10.2026). */
+.marca { display: block; line-height: 0; text-decoration: none; }
+.ecra-tv {
+  position: relative; display: block; overflow: hidden;
+  padding: 0.55rem 0.85rem 0.6rem; border-radius: 1.1rem / 1.4rem;
+  background-color: var(--ocre);
+  animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
+  box-shadow: 0 0 0 3px #2a2733, 0 0 0 5px #0d0c12, inset 0 0 1.2rem rgba(14, 12, 8, 0.45);
+}
+.ecra-tv img { position: relative; z-index: 1; display: block; width: 7.5rem; }
+.ecra-tv::before {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(14, 12, 8, 0.1) 0 1px, transparent 1px 3px),
+              radial-gradient(ellipse at center, transparent 55%, rgba(14, 12, 8, 0.35) 100%);
+}
+.ecra-tv::after {
+  content: ""; position: absolute; left: 0; right: 0; top: -45%; height: 45%; z-index: 3; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.16), transparent);
+  animation: varrimento 9s linear infinite; animation-delay: var(--fase-varrimento, 0s);
+}
+.marca:hover .ecra-tv, .marca:focus-visible .ecra-tv { box-shadow: 0 0 0 3px #3a3646, 0 0 0 5px #0d0c12, inset 0 0 1.2rem rgba(14, 12, 8, 0.35), 0 0 1.4rem rgba(169, 156, 255, 0.25); }
+@keyframes dia-noite { 0%, 100% { background-color: var(--ocre); } 50% { background-color: var(--lilas); } }
+@keyframes varrimento { from { transform: translateY(0); } to { transform: translateY(330%); } }
 .nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-size: 0.95rem; }
 .nav a { text-decoration: none; color: var(--tinta-2); padding-block: 0.25rem; }
 .nav a:hover, .nav a[aria-current="page"] { color: var(--tinta); text-decoration: underline; }
@@ -140,7 +164,9 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
 .familia-nome { font-family: var(--f-maquina); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
 .familia.palco .familia-nome { color: var(--ocre); }
 .familia.ecra .familia-nome { color: var(--lilas); }
+/* As portas têm todas a mesma largura (o Jesús, 25.10.2026). */
 .porta {
+  width: 12.5rem;
   display: grid; gap: 0.1rem; padding: 0.8rem 1.4rem 0.85rem;
   border: 1px solid currentColor; border-radius: 999px; text-decoration: none;
 }
@@ -151,9 +177,6 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
 
 /* ——— palco (teatro) ——— */
 body.palco { background: var(--ocre); color: var(--barro); color-scheme: light; }
-body.palco .marca img { filter: none; }
-body.palco .nav a { color: var(--barro); opacity: 0.78; }
-body.palco .nav a:hover, body.palco .nav a[aria-current="page"] { opacity: 1; }
 body.palco .rodape, body.palco .rodape a { color: var(--barro); }
 body.palco .rodape .envoltorio { border-top-color: rgba(14, 12, 8, 0.3); }
 body.palco .seccao h2 { color: var(--barro); border-top-color: rgba(14, 12, 8, 0.3); }
@@ -182,12 +205,16 @@ body.palco .cabeca p { color: var(--barro); }
 .epas b { font-weight: 500; }
 
 @media (max-width: 34rem) {
+  .porta { width: 10rem; }
+  .portas { gap: 1.25rem 1.5rem; }
   .lista { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
   .lista dd { margin-bottom: 0.8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
+  .ecra-tv, .ecra-tv::after { animation: none; }
+  .ecra-tv::after { display: none; }
 }
 
 /* ——— labarta ——— */

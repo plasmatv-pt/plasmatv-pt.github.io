@@ -3,6 +3,7 @@
 // quadrado. Só entre páginas do próprio site, e nunca com «reduzir movimento». Sem guardar nada: a única marca é uma
 // linha na memória da sessão do separador («vim de um clique interno»), que se apaga logo à chegada.
 // Carrega no <head>, sem «defer», para tapar a página antes de ela se desenhar.
+// O topo (o ecrã com o logótipo e o menu) fica por cima da passagem: muda só o corpo da página (o Jesús, 25.10.2026).
 (function () {
   var raiz = document.documentElement;
   var CHAVE = 'plasmatv:passagem';
@@ -14,6 +15,11 @@
   try { vimDeDentro = sessionStorage.getItem(CHAVE) === '1'; sessionStorage.removeItem(CHAVE); } catch (e) { /* sem memória: sem efeito */ }
   if (vimDeDentro && !calmo) raiz.classList.add('a-entrar');
 
+  // O dia e a noite do ecrã do logótipo seguem o relógio, para não recomeçarem a cada página.
+  var s = Date.now() / 1000;
+  raiz.style.setProperty('--fase-dia', '-' + (s % 90).toFixed(2) + 's');
+  raiz.style.setProperty('--fase-varrimento', '-' + (s % 9).toFixed(2) + 's');
+
   function corDe(caminho) { return /^\/(en\/)?teatro\//.test(caminho) ? OCRE : NOITE; }
 
   function tela() {
@@ -23,7 +29,7 @@
     c.width = cols * lado; c.height = linhas * lado;
     c.className = 'passagem';
     c.setAttribute('aria-hidden', 'true');
-    c.style.cssText = 'position:fixed;left:0;top:0;width:' + c.width + 'px;height:' + c.height + 'px;z-index:2147483647;pointer-events:none';
+    c.style.cssText = 'position:fixed;left:0;top:0;width:' + c.width + 'px;height:' + c.height + 'px;z-index:1000;pointer-events:none';
     var ordem = [];
     for (var i = 0; i < cols * linhas; i++) ordem.push(i);
     for (var j = ordem.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)); var t = ordem[j]; ordem[j] = ordem[k]; ordem[k] = t; }
