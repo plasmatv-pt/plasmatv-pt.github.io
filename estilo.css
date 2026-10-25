@@ -29,6 +29,8 @@
   --sombra: #8c879a;
   --ocre: #c8860a;
   --lilas: #a99cff;
+  --coral: #e0704f; /* só no caminho do dia à noite do topo */
+  --rosa: #cf86c4;
   --barro: #0e0c08;
   --linha: #2e2b3a;
 
@@ -131,7 +133,14 @@ img, svg { max-width: 100%; height: auto; }
   background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.16), transparent);
   animation: varrimento 9s linear infinite; animation-delay: var(--fase-varrimento, 0s);
 }
-@keyframes dia-noite { 0%, 100% { background-color: var(--ocre); } 50% { background-color: var(--lilas); } }
+/* Do ocre ao lilás pelo coral e pelo rosa, como num pôr do sol: misturados a direito, os dois quase opostos davam a
+   meio um rosa acastanhado e baço (o Jesús aceitou experimentar, 25.10.2026). */
+@keyframes dia-noite {
+  0%, 100% { background-color: var(--ocre); }
+  17%, 83% { background-color: var(--coral); }
+  33%, 67% { background-color: var(--rosa); }
+  50% { background-color: var(--lilas); }
+}
 @keyframes varrimento { from { transform: translateY(0); } to { transform: translateY(330%); } }
 
 .topo .envoltorio {
@@ -200,11 +209,25 @@ html.com-js .ao-topo.visivel { opacity: 1; visibility: visible; transform: none;
 /* O botão de três riscas só existe no telemóvel, e só com JavaScript. */
 .menu-botao { display: none; }
 
-/* Nos ecrãs grandes deitados (tablets e computadores, em paisagem), a língua volta à caixinha, sem sublinhado; ao
-   alto, e no telemóvel, fica só sublinhada (o Jesús, 25.10.2026). */
-@media (min-width: 48.01rem) and (min-height: 32rem) and (orientation: landscape) {
+/* O botão do som (o Jesús, 25.10.2026): o altifalante, ou o altifalante calado. Só existe com JavaScript, que é quem faz os
+   sons (src/transicao.js) e quem liga e desliga (src/topo.js). */
+.som { display: none; }
+html.com-js .som {
+  display: inline-grid; place-items: center; padding: 0.3rem 0.2rem; cursor: pointer;
+  color: var(--barro); background: transparent; border: 2px solid transparent; border-radius: 0.55rem;
+}
+.som svg { display: block; width: 1.5rem; height: 1.5rem; }
+.som .som-calado, html.sem-som .som .som-ligado { display: none; }
+html.sem-som .som .som-calado { display: block; }
+
+/* Deitados (em paisagem, em qualquer ecrã), a língua e o som ficam em caixinhas, sem sublinhado; ao alto, ficam só as
+   letras sublinhadas e o ícone (o Jesús, 25.10.2026). */
+@media (orientation: landscape) {
   .linguas summary { text-decoration: none; border: 2px solid var(--barro); border-radius: 0.55rem; padding: 0.4rem 0.5rem 0.35rem; }
   .linguas summary:hover, .linguas[open] summary { background: rgba(14, 12, 8, 0.1); }
+  html.com-js .som { padding: 0.15rem 0.3rem; border-color: var(--barro); }
+  html.com-js .som:hover { background: rgba(14, 12, 8, 0.1); }
+  .som svg { width: 1.2rem; height: 1.2rem; }
 }
 
 main { flex: 1; }
@@ -293,7 +316,7 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
 
 /* ——— telemóvel: o menu numa caixa ——— */
 @media (max-width: 48rem) {
-  .topo .envoltorio { row-gap: 0; padding-block: 0.8rem; }
+  .topo .envoltorio { row-gap: 0; column-gap: 1.1rem; padding-block: 0.8rem; }
   .marca img { width: 7rem; }
 
   html.com-js .menu-botao {

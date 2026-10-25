@@ -1,6 +1,6 @@
 // O topo do site (o Jesús, 25.10.2026): o menu numa caixa no telemóvel, a escolha de língua, o cabeçalho que sobe e
 // desaparece quando se desce a página e volta quando se sobe, e o botão «ir ao topo» (estes dois, em todos os ecrãs).
-// Não guarda nada. Sem este ficheiro, o menu fica sempre à vista e a escolha de língua abre na mesma (é um <details>).
+// Só guarda, na memória do separador, se o som foi desligado. Sem este ficheiro, o menu fica sempre à vista e a escolha de língua abre na mesma (é um <details>).
 (function () {
   var topo = document.querySelector('.topo');
   if (!topo) return;
@@ -63,6 +63,22 @@
     if (!pedido) { pedido = true; window.requestAnimationFrame(aoDeslocar); }
   }, { passive: true });
   topo.addEventListener('focusin', function () { topo.classList.remove('escondido'); });
+
+  // O som: ligado até alguém o desligar; a escolha fica na memória do separador (src/transicao.js lê-a à chegada).
+  var som = topo.querySelector('.som');
+  if (som) {
+    var raiz = document.documentElement;
+    som.setAttribute('aria-pressed', raiz.classList.contains('sem-som') ? 'false' : 'true');
+    som.addEventListener('click', function () {
+      var calar = !raiz.classList.contains('sem-som');
+      raiz.classList.toggle('sem-som', calar);
+      som.setAttribute('aria-pressed', calar ? 'false' : 'true');
+      try {
+        if (calar) sessionStorage.setItem('plasmatv:som', 'nao');
+        else sessionStorage.removeItem('plasmatv:som');
+      } catch (e) { /* sem memória: a escolha vale só nesta página */ }
+    });
+  }
 
   if (subir) subir.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: calmo.matches ? 'auto' : 'smooth' });
