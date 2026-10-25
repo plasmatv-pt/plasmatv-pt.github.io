@@ -70,28 +70,24 @@ html.a-sair body { pointer-events: none; }
 html.a-entrar body::before { animation: chuvisco-salta 0.3s steps(1) infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
 html.a-entrar body::after { animation: faixas-rolam 0.7s linear infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
 
-/* A entrada no site (o Jesús, 25.10.2026): quando a página carrega inteira, ou seja, quando alguém chega de fora,
-   por qualquer endereço do site (dentro do site, a página já não se recarrega). Primeiro o chuvisco no ecrã inteiro;
-   depois o topo desce por cima dele; por fim o chuvisco vai-se, o corpo aparece a subir de leve e o rodapé sobe do
-   fundo. Menos de dois segundos. Nunca com «reduzir movimento» (src/transicao.js não põe a classe). */
-html.a-arrancar body::before, html.a-arrancar body::after {
-  content: ""; position: fixed; inset: 0; z-index: 1002; pointer-events: none;
-}
+/* A entrada no site (o Jesús, 25.10.2026, afinada no mesmo dia): quando a página carrega inteira, ou seja, quando
+   alguém chega de fora, por qualquer endereço do site (dentro do site, a página já não se recarrega). Começa em negro;
+   depois aparece, em fundido, o que se mexe no ecrã (a constelação da página inicial); depois o conteúdo; e por fim o
+   topo desce e o rodapé sobe, ao mesmo tempo. Pouco mais de dois segundos. Nunca com «reduzir movimento»
+   (src/transicao.js não põe a classe). */
 html.a-arrancar body::before {
-  background: #4a4950 url("/img/chuvisco.png") 0 0 / 384px 384px repeat; image-rendering: pixelated;
-  animation: chuvisco-salta 0.3s steps(1) infinite, chuvisco-vai 0.5s ease-in 1.15s both;
+  content: ""; position: fixed; inset: 0; z-index: 1002; pointer-events: none;
+  background: #000; animation: chuvisco-vai 0.7s ease-in-out 0.25s both;
 }
-html.a-arrancar body::after {
-  background: repeating-linear-gradient(to bottom, rgba(8, 7, 10, 0) 0, rgba(8, 7, 10, 0.45) 22%, rgba(8, 7, 10, 0) 45%, rgba(255, 255, 255, 0.06) 47%, rgba(8, 7, 10, 0) 49%) 0 0 / 100% 60vh;
-  animation: faixas-rolam 0.7s linear infinite, chuvisco-vai 0.5s ease-in 1.15s both;
-}
+html.a-arrancar .inicio canvas { animation: aparece 1s ease-out 0.35s both; }
+html.a-arrancar main > :not(.inicio), html.a-arrancar .inicio .envoltorio { animation: corpo-aparece 0.7s ease-out 1.05s both; }
 /* O topo continua a sua volta do dia e da noite (a primeira animação, a mesma de sempre) enquanto desce. */
 html.a-arrancar .topo {
   z-index: 1003;
-  animation: dia-noite 90s ease-in-out var(--fase-dia, 0s) infinite, topo-desce 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) 0.6s both;
+  animation: dia-noite 90s ease-in-out var(--fase-dia, 0s) infinite, topo-desce 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 1.55s both;
 }
-html.a-arrancar .rodape { z-index: 1003; animation: rodape-sobe 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 1.25s both; }
-html.a-arrancar main { animation: corpo-aparece 0.6s ease-out 1.2s both; }
+html.a-arrancar .rodape { z-index: 1003; animation: rodape-sobe 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 1.55s both; }
+@keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
 @keyframes topo-desce { from { translate: 0 -100%; } to { translate: 0 0; } }
 @keyframes rodape-sobe { from { translate: 0 100%; } to { translate: 0 0; } }
 @keyframes corpo-aparece { from { opacity: 0; translate: 0 0.75rem; } to { opacity: 1; translate: 0 0; } }
@@ -441,13 +437,20 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
-  .topo, .ao-topo, .topo-ecra::after, .ao-topo::after, .rodape a.vivo, .enviar { animation: none !important; }
+  .topo, .ao-topo, .topo-ecra::after, .ao-topo::after, .rodape a.vivo, .enviar, .labarta-cor { animation: none !important; }
   .topo-ecra::after, .ao-topo::after { display: none; }
 }
 
 /* ——— labarta ——— */
 .cabeca.labarta .convite { color: var(--sombra); }
-.logo-labarta { display: block; width: min(15rem, 60%); margin: 0.5rem 0 1rem; filter: invert(1); }
+/* O logótipo da LABARTA três vezes, seguidas, cada uma no seu quadrado (o Jesús, 25.10.2026). O primeiro tem o fundo
+   transparente, e a cor por trás muda com o dia e a noite do topo; os outros dois ficam como são. */
+.logos-labarta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 42rem; margin: 0.5rem 0 1.5rem; }
+.logos-labarta img { display: block; width: 100%; height: auto; }
+.labarta-cor {
+  display: block; background-color: var(--ocre);
+  animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
+}
 .album {
   display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1rem 2rem;
   padding-block: 1.5rem; border-top: 1px solid var(--linha); max-width: 56rem;

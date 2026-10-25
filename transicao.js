@@ -26,8 +26,8 @@
   if (!calmo) {
     raiz.classList.add('a-arrancar');
     var arrancou = function () { raiz.classList.remove('a-arrancar'); };
-    document.addEventListener('animationend', function (e) { if (e.animationName === 'corpo-aparece') arrancou(); });
-    window.setTimeout(arrancou, 2500); // se as animações não chegarem a correr
+    document.addEventListener('animationend', function (e) { if (e.animationName === 'rodape-sobe') arrancou(); });
+    window.setTimeout(arrancou, 3000); // se as animações não chegarem a correr
   }
 
   // Quando o chuvisco acaba de ir, tira-se.
@@ -122,7 +122,7 @@
     }
     // O que chega a mudar de cor com o dia e a noite começa no ponto em que o topo vai, e não do princípio.
     var fase = '-' + ((Date.now() / 1000) % 90).toFixed(2) + 's';
-    var vivos = document.querySelectorAll('main .enviar');
+    var vivos = document.querySelectorAll('main .enviar, main .labarta-cor');
     for (var m = 0; m < vivos.length; m++) vivos[m].style.animationDelay = fase;
     return true;
   }
