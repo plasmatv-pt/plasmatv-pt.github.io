@@ -21,6 +21,15 @@
   raiz.style.setProperty('--fase-dia', '-' + (s % 90).toFixed(2) + 's');
   raiz.style.setProperty('--fase-varrimento', '-' + (s % 9).toFixed(2) + 's');
 
+  // A entrada no site: só quando a página carrega inteira, que é quando alguém chega de fora (dentro do site, a página
+  // já não se recarrega). O desenho está em src/estilo.css (html.a-arrancar).
+  if (!calmo) {
+    raiz.classList.add('a-arrancar');
+    var arrancou = function () { raiz.classList.remove('a-arrancar'); };
+    document.addEventListener('animationend', function (e) { if (e.animationName === 'corpo-aparece') arrancou(); });
+    window.setTimeout(arrancou, 2500); // se as animações não chegarem a correr
+  }
+
   // Quando o chuvisco acaba de ir, tira-se.
   document.addEventListener('animationend', function (e) {
     if (e.animationName === 'chuvisco-vai') raiz.classList.remove('a-entrar');
@@ -134,6 +143,7 @@
   function ir(destino, comoVeio, y) {
     if (aMudar) return;
     aMudar = true;
+    raiz.classList.remove('a-arrancar'); // um clique a meio da entrada passa logo à passagem
     // O endereço muda logo; se a página nova não chegar, recarrega-se esse endereço à moda antiga.
     if (comoVeio === 'clique') {
       history.replaceState({ y: window.scrollY }, '');
@@ -186,6 +196,6 @@
 
   // Ao voltar atrás para uma página guardada pelo navegador tal como ficou, tira-se o chuvisco que lá estivesse.
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted) { raiz.classList.remove('a-sair', 'a-entrar'); aMudar = false; }
+    if (e.persisted) { raiz.classList.remove('a-sair', 'a-entrar', 'a-arrancar'); aMudar = false; }
   });
 })();

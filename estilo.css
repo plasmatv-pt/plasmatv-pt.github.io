@@ -69,6 +69,32 @@ html.a-sair body::after { animation: faixas-rolam 0.7s linear infinite, chuvisco
 html.a-sair body { pointer-events: none; }
 html.a-entrar body::before { animation: chuvisco-salta 0.3s steps(1) infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
 html.a-entrar body::after { animation: faixas-rolam 0.7s linear infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
+
+/* A entrada no site (o Jesús, 25.10.2026): quando a página carrega inteira, ou seja, quando alguém chega de fora,
+   por qualquer endereço do site (dentro do site, a página já não se recarrega). Primeiro o chuvisco no ecrã inteiro;
+   depois o topo desce por cima dele; por fim o chuvisco vai-se, o corpo aparece a subir de leve e o rodapé sobe do
+   fundo. Menos de dois segundos. Nunca com «reduzir movimento» (src/transicao.js não põe a classe). */
+html.a-arrancar body::before, html.a-arrancar body::after {
+  content: ""; position: fixed; inset: 0; z-index: 1002; pointer-events: none;
+}
+html.a-arrancar body::before {
+  background: #4a4950 url("/img/chuvisco.png") 0 0 / 384px 384px repeat; image-rendering: pixelated;
+  animation: chuvisco-salta 0.3s steps(1) infinite, chuvisco-vai 0.5s ease-in 1.15s both;
+}
+html.a-arrancar body::after {
+  background: repeating-linear-gradient(to bottom, rgba(8, 7, 10, 0) 0, rgba(8, 7, 10, 0.45) 22%, rgba(8, 7, 10, 0) 45%, rgba(255, 255, 255, 0.06) 47%, rgba(8, 7, 10, 0) 49%) 0 0 / 100% 60vh;
+  animation: faixas-rolam 0.7s linear infinite, chuvisco-vai 0.5s ease-in 1.15s both;
+}
+/* O topo continua a sua volta do dia e da noite (a primeira animação, a mesma de sempre) enquanto desce. */
+html.a-arrancar .topo {
+  z-index: 1003;
+  animation: dia-noite 90s ease-in-out var(--fase-dia, 0s) infinite, topo-desce 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) 0.6s both;
+}
+html.a-arrancar .rodape { z-index: 1003; animation: rodape-sobe 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 1.25s both; }
+html.a-arrancar main { animation: corpo-aparece 0.6s ease-out 1.2s both; }
+@keyframes topo-desce { from { translate: 0 -100%; } to { translate: 0 0; } }
+@keyframes rodape-sobe { from { translate: 0 100%; } to { translate: 0 0; } }
+@keyframes corpo-aparece { from { opacity: 0; translate: 0 0.75rem; } to { opacity: 1; translate: 0 0; } }
 @keyframes chuvisco-salta {
   0% { background-position: 0 0; } 17% { background-position: -123px -57px; } 33% { background-position: -246px -201px; }
   50% { background-position: -81px -294px; } 67% { background-position: -312px -36px; } 83% { background-position: -177px -267px; }
