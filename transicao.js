@@ -140,19 +140,28 @@
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
   // Vai para «destino». «comoVeio»: 'clique' (acrescenta à história) ou 'historia' (o «voltar» ou o «avançar»).
+  // A mesma página noutra língua? (As línguas que não são a de origem vivem em /en/, /es/…; ver scripts/build.mjs.)
+  var semLingua = function (caminho) { return caminho.replace(/^\/(en|es)(?=\/)/, ''); };
+
   function ir(destino, comoVeio, y) {
     if (aMudar) return;
     aMudar = true;
     raiz.classList.remove('a-arrancar'); // um clique a meio da entrada passa logo à passagem
+    // Mudar de língua não é mudar de canal: os textos dessintonizam-se e a outra língua chega sintonizada, sem
+    // chuvisco, e fica-se no mesmo sítio da página (o Jesús, 25.10.2026; o desenho em src/estilo.css).
+    var trocaDeLingua = semLingua(destino.pathname) === semLingua(aqui);
+    if (trocaDeLingua && comoVeio === 'clique') y = window.scrollY;
+    var sair = trocaDeLingua ? 'a-dessintonizar' : 'a-sair', entrar = trocaDeLingua ? 'a-sintonizar' : 'a-entrar';
     // O endereço muda logo; se a página nova não chegar, recarrega-se esse endereço à moda antiga.
     if (comoVeio === 'clique') {
       history.replaceState({ y: window.scrollY }, '');
-      history.pushState({ y: 0 }, '', destino.pathname + destino.search + destino.hash);
+      history.pushState({ y: y || 0 }, '', destino.pathname + destino.search + destino.hash);
     }
     aqui = window.location.pathname;
     var aModaAntiga = function () { window.location.reload(); };
-    if (!calmo) { raiz.classList.remove('a-entrar'); raiz.classList.add('a-sair'); }
-    var soou = (!calmo && window.plasmatvSom) ? window.plasmatvSom.tocar('canal') : null;
+    if (!calmo) { raiz.classList.remove('a-entrar', 'a-sintonizar'); raiz.classList.add(sair); }
+    var soou = (!calmo && window.plasmatvSom) ? window.plasmatvSom.tocar(trocaDeLingua ? 'sintonizar' : 'canal') : null;
+    if (trocaDeLingua) soou = null; // o som da sintonização acompanha a troca: não é preciso esperar que acabe
     var inicio = Date.now(), texto = null, falhou = false;
     pedir(destino.pathname).then(function (t) { texto = t; }, function () { falhou = true; });
 
@@ -164,10 +173,10 @@
 
       if (!trocar(texto)) return aModaAntiga();
       window.scrollTo(0, y || 0);
-      raiz.classList.remove('a-sair');
+      raiz.classList.remove('a-sair', 'a-dessintonizar');
       if (!calmo) {
-        raiz.classList.add('a-entrar');
-        window.setTimeout(function () { raiz.classList.remove('a-entrar'); }, 1500);
+        raiz.classList.add(entrar);
+        window.setTimeout(function () { raiz.classList.remove(entrar); }, 1500);
       }
       aMudar = false;
       chegou();

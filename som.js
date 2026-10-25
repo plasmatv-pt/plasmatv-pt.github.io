@@ -1,5 +1,6 @@
 // Os sons do site (o Jesús, 25.10.2026): todos do mesmo aparelho, uma televisão antiga, e todos baixinhos.
 //  - canal: mudar de página (src/transicao.js) — o estalido do botão e um sopro de chuvisco;
+//  - sintonizar: mudar de língua (src/transicao.js) — um assobio que desliza e um sopro que se afina;
 //  - abrir / fechar: abrir e fechar as caixas (a língua, o menu do telemóvel; src/topo.js) — um tique discreto;
 //  - ligar: ligar o som (src/topo.js) — um sinal curto, que diz que o som voltou.
 // Fazem-se na hora (Web Audio), sem ficheiros. Só soam depois de um toque ou clique, nunca sozinhos.
@@ -89,6 +90,30 @@
     abrir: function (t) { ruido(t, 0.02, 'bandpass', 3200, 1.2, 1.8); tom(t, 900, 700, 0.035, 0.32, 'triangle'); return t + 0.045; },
     fechar: function (t) { ruido(t, 0.02, 'bandpass', 2200, 1.2, 1.6); tom(t, 620, 480, 0.035, 0.3, 'triangle'); return t + 0.045; },
     // o som de volta: dois tons curtos a subir, como uma televisão a acordar
+    // a outra língua a chegar como uma estação sintonizada: um assobio que desliza e um sopro que se afina
+    sintonizar: function (t) {
+      var o = ac.createOscillator(); o.type = 'sine';
+      o.frequency.setValueAtTime(420, t);
+      o.frequency.exponentialRampToValueAtTime(1500, t + 0.18);
+      o.frequency.exponentialRampToValueAtTime(880, t + 0.42);
+      var g = ac.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.6, t + 0.03);
+      g.gain.setValueAtTime(0.6, t + 0.3);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+      o.connect(g); g.connect(saida);
+      o.start(t); o.stop(t + 0.47);
+      var s = ac.createBufferSource(); s.buffer = grao;
+      var f = ac.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 4;
+      f.frequency.setValueAtTime(900, t);
+      f.frequency.exponentialRampToValueAtTime(3500, t + 0.2);
+      f.frequency.exponentialRampToValueAtTime(2000, t + 0.42);
+      var gs = ac.createGain();
+      envelope(gs, t, 1.4, 0.45);
+      s.connect(f); f.connect(gs); gs.connect(saida);
+      s.start(t); s.stop(t + 0.47);
+      return t + 0.46;
+    },
     ligar: function (t) { tom(t, 520, 540, 0.07, 0.35, 'sine'); tom(t + 0.08, 780, 800, 0.09, 0.35, 'sine'); return t + 0.18; },
   };
 
