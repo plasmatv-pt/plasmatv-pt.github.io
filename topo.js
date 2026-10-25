@@ -85,6 +85,19 @@
     });
   }
 
+  // As alturas do topo e do rodapé, para a página de entrada caber no ecrã entre os dois, e para o «ir ao topo» ficar
+  // por cima do rodapé (src/estilo.css).
+  var raizEl = document.documentElement, rodape = document.querySelector('.rodape');
+  function medirAlturas() {
+    raizEl.style.setProperty('--topo-altura', topo.offsetHeight + 'px');
+    rodape = document.querySelector('.rodape');
+    if (rodape) raizEl.style.setProperty('--rodape-altura', rodape.offsetHeight + 'px');
+  }
+  medirAlturas();
+  window.addEventListener('resize', medirAlturas);
+  if (window.ResizeObserver && rodape) new ResizeObserver(medirAlturas).observe(rodape);
+  document.addEventListener('plasmatv:pagina', medirAlturas);
+
   if (subir) subir.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: calmo.matches ? 'auto' : 'smooth' });
     var marca = topo.querySelector('.marca');

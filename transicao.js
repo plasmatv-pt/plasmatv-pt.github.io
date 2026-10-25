@@ -36,6 +36,7 @@
     if (!a || a.target === '_blank' || a.hasAttribute('download')) return null;
     var destino = new URL(a.href, window.location.href);
     if (destino.origin !== window.location.origin || destino.pathname === window.location.pathname) return null;
+    if (!/(\/|\.html)$/.test(destino.pathname)) return null; // só páginas (as licenças das letras abrem-se à parte)
     return destino;
   }
 
@@ -99,8 +100,21 @@
     });
 
     mainVelho.replaceWith(document.importNode(mainNovo, true));
-    var rodape = document.querySelector('.rodape'), rodapeNovo = novo.querySelector('.rodape');
-    if (rodape && rodapeNovo) rodape.replaceWith(document.importNode(rodapeNovo, true));
+    // O rodapé fica (as cores dele vão a meio do dia e da noite): só mudam os endereços e as palavras de cada ligação.
+    var ligacoes = document.querySelectorAll('.rodape a'), novasLig = novo.querySelectorAll('.rodape a');
+    if (ligacoes.length === novasLig.length) {
+      for (var k = 0; k < ligacoes.length; k++) {
+        ligacoes[k].setAttribute('href', novasLig[k].getAttribute('href'));
+        ligacoes[k].textContent = novasLig[k].textContent;
+      }
+    } else {
+      var rodape = document.querySelector('.rodape'), rodapeNovo = novo.querySelector('.rodape');
+      if (rodape && rodapeNovo) rodape.replaceWith(document.importNode(rodapeNovo, true));
+    }
+    // O que chega a mudar de cor com o dia e a noite começa no ponto em que o topo vai, e não do princípio.
+    var fase = '-' + ((Date.now() / 1000) % 90).toFixed(2) + 's';
+    var vivos = document.querySelectorAll('main .enviar');
+    for (var m = 0; m < vivos.length; m++) vivos[m].style.animationDelay = fase;
     return true;
   }
 

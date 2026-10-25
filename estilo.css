@@ -80,6 +80,7 @@ html.a-entrar body::after { animation: faixas-rolam 0.7s linear infinite, chuvis
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   background: var(--noite);
@@ -182,7 +183,7 @@ img, svg { max-width: 100%; height: auto; }
 .ao-topo { display: none; }
 html.com-js .ao-topo {
   display: grid; place-items: center; position: fixed; z-index: 999;
-  right: max(1rem, env(safe-area-inset-right, 0px)); bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  right: max(1rem, env(safe-area-inset-right, 0px)); bottom: calc(var(--rodape-altura, 2.6rem) + 0.75rem); /* por cima do rodapé */
   width: 3rem; height: 3rem; padding: 0; cursor: pointer;
   color: var(--barro); border: 2px solid var(--barro); border-radius: 50%;
   background-color: var(--ocre); animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
@@ -232,13 +233,30 @@ html.sem-som .som .som-calado { display: block; }
 
 main { flex: 1; }
 
-/* ——— rodapé ——— */
-.rodape { font-family: var(--f-maquina); font-size: 0.8rem; color: var(--sombra); }
+/* ——— rodapé ———
+   Sempre à vista, colado ao fundo do ecrã, por cima da passagem como o topo (o Jesús, 25.10.2026). O email (que leva
+   ao contacto) e o «©» (que leva aos créditos) mudam de cor com o dia e a noite do topo; sublinham-se ao passar. */
+.rodape {
+  position: sticky; bottom: 0; z-index: 1001;
+  background: var(--noite); border-top: 1px solid var(--linha);
+  font-family: var(--f-maquina); font-size: 0.8rem; color: var(--sombra);
+}
 .rodape .envoltorio {
-  display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; padding-block: 1.5rem 2rem;
-  border-top: 1px solid var(--linha);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 1.75rem;
+  padding-top: 0.7rem; padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
 }
 .rodape a { color: var(--tinta-2); }
+.rodape a.vivo {
+  text-decoration: none; color: var(--ocre);
+  animation: dia-noite-letra 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
+}
+.rodape a.vivo:hover, .rodape a.vivo:focus-visible { text-decoration: underline; }
+@keyframes dia-noite-letra {
+  0%, 100% { color: var(--ocre); }
+  17%, 83% { color: var(--coral); }
+  33%, 67% { color: var(--rosa); }
+  50% { color: var(--lilas); }
+}
 
 /* ——— títulos e texto ——— */
 h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; text-wrap: balance; margin: 0; }
@@ -254,37 +272,82 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
   padding-top: 1rem; margin-bottom: 1rem; border-top: 1px solid var(--linha);
 }
 
-/* ——— início ——— */
+/* ——— início ———
+   A entrada cabe no ecrã, entre o topo e o rodapé (o Jesús, 25.10.2026): as alturas de um e de outro medem-se em
+   src/topo.js, e as letras, os espaços e as portas encolhem com a altura do ecrã, não só com a largura. */
 .inicio {
   position: relative; isolation: isolate; overflow: hidden;
-  display: flex; align-items: center; min-height: min(78vh, 46rem);
+  display: flex; align-items: center;
+  min-height: calc(100vh - var(--topo-altura, 5.75rem) - var(--rodape-altura, 2.6rem));
+  min-height: calc(100svh - var(--topo-altura, 5.75rem) - var(--rodape-altura, 2.6rem));
 }
 .inicio canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
-.inicio .envoltorio { padding-block: 3rem 4rem; }
+.inicio .envoltorio { padding-block: clamp(1rem, 4.5vh, 3rem) clamp(1rem, 5vh, 4rem); }
 .lema {
   font-family: var(--f-titulo); font-weight: 400; margin: 0;
-  font-size: clamp(2.1rem, 7.2vw, 4.4rem); line-height: 1.06; letter-spacing: 0.005em;
+  font-size: clamp(1.5rem, min(7.2vw, 8vh), 4.4rem); line-height: 1.06; letter-spacing: 0.005em;
 }
 .lema .palco { color: var(--ocre); }
 .lema .ecra { color: var(--lilas); }
-.bio { margin: 1.75rem 0 0; font-size: 1.12rem; line-height: 1.55; max-width: 34rem; }
-.bio .codigo { display: block; margin-top: 0.5rem; font-family: var(--f-maquina); font-size: 0.95rem; color: var(--tinta-2); }
+.bio { margin: clamp(0.6rem, 2.6vh, 1.75rem) 0 0; font-size: clamp(0.92rem, 2.3vh, 1.12rem); line-height: 1.5; max-width: 34rem; }
+.bio .codigo { display: block; margin-top: 0.5rem; font-family: var(--f-maquina); font-size: clamp(0.75rem, 1.9vh, 0.95rem); color: var(--tinta-2); }
 .bio .codigo b { font-weight: 400; color: var(--lilas); }
-.portas { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1.5rem 2.5rem; margin-top: 2.25rem; }
-.familia { display: grid; justify-items: start; gap: 0.7rem; }
+.portas { display: flex; flex-wrap: wrap; align-items: flex-start; gap: clamp(0.6rem, 2vh, 1.5rem) 2.5rem; margin-top: clamp(0.9rem, 3.4vh, 2.25rem); }
+.familia { display: grid; justify-items: start; gap: clamp(0.4rem, 1.1vh, 0.7rem); }
 .familia-nome { font-family: var(--f-maquina); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
 .familia.palco .familia-nome { color: var(--ocre); }
 .familia.ecra .familia-nome { color: var(--lilas); }
 /* As portas têm todas a mesma largura (o Jesús, 25.10.2026). */
 .porta {
   width: 12.5rem;
-  display: grid; gap: 0.1rem; padding: 0.8rem 1.4rem 0.85rem;
+  display: grid; gap: 0.1rem; padding: clamp(0.45rem, 1.2vh, 0.8rem) 1.4rem clamp(0.5rem, 1.25vh, 0.85rem);
   border: 1px solid currentColor; border-radius: 999px; text-decoration: none;
 }
-.porta small { font-family: var(--f-maquina); font-size: 0.74rem; opacity: 0.8; }
+.porta small { font-family: var(--f-maquina); font-size: 0.74rem; opacity: 0.8; white-space: nowrap; }
 .porta.palco { color: var(--ocre); }
 .porta.ecra { color: var(--lilas); }
 .porta:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+
+/* Ecrãs deitados e baixos (o telemóvel em paisagem): o lema e a apresentação à esquerda, as portas à direita. */
+@media (orientation: landscape) and (max-height: 32rem) {
+  .inicio .envoltorio { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1.5rem; align-items: center; padding-block: 0.75rem; }
+  .inicio .lema, .inicio .bio { grid-column: 1; }
+  .inicio .lema { font-size: clamp(1.25rem, 7.5vh, 2.6rem); }
+  .inicio .portas { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; column-gap: 1.25rem; }
+  .inicio .porta { width: 9.75rem; padding-inline: 1rem; }
+}
+
+/* Nos ecrãs estreitos, o rodapé aperta um pouco para caber numa linha. */
+@media (max-width: 30rem) {
+  .rodape { font-size: 0.7rem; }
+  .rodape .envoltorio { column-gap: 1rem; }
+}
+@media (max-width: 23.5rem) {
+  .rodape { font-size: 0.66rem; }
+  .rodape .envoltorio { column-gap: 0.75rem; }
+}
+
+/* ——— contacto ——— */
+.contacto-form { display: grid; gap: 1rem; margin-top: 0.5rem; }
+.campo { display: grid; gap: 0.35rem; }
+.campo span { font-family: var(--f-maquina); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sombra); }
+.campo input, .campo textarea {
+  width: 100%; font: inherit; color: var(--tinta); background: var(--noite-2);
+  border: 1px solid var(--linha); border-radius: 0.6rem; padding: 0.65rem 0.8rem;
+}
+.campo textarea { resize: vertical; min-height: 9rem; }
+.campo input:focus-visible, .campo textarea:focus-visible { outline: 2px solid var(--lilas); outline-offset: 1px; }
+.contacto-form .nota { margin: 0; font-size: 0.9rem; color: var(--tinta-2); }
+/* O botão de enviar muda de cor com o dia e a noite do topo. */
+.enviar {
+  justify-self: start; cursor: pointer; font: inherit; font-weight: 400; color: var(--barro);
+  border: 0; border-radius: 999px; padding: 0.6rem 1.7rem;
+  background-color: var(--ocre); animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
+}
+.enviar:hover { text-decoration: underline; }
+.contacto-form .aviso { margin: 0; color: var(--tinta-2); }
+.direto { color: var(--tinta-2); margin-top: 1.5rem; }
+.direto a, .aviso a { color: var(--lilas); }
 
 /* ——— teatro ——— */
 .abertura { font-size: 1.2rem; line-height: 1.55; }
@@ -308,8 +371,9 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
 .epas b { font-weight: 500; }
 
 @media (max-width: 34rem) {
-  .porta { width: 10rem; }
-  .portas { gap: 1.25rem 1.5rem; }
+  /* As duas famílias de portas ficam sempre lado a lado: cada porta tem metade da largura que sobra. */
+  .porta { width: clamp(8rem, calc((100vw - 2.5rem - 1.25rem) / 2), 10rem); padding-inline: 1.1rem; }
+  .portas { gap: clamp(0.6rem, 2vh, 1.25rem) 1.25rem; }
   .lista { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
   .lista dd { margin-bottom: 0.8rem; }
 }
@@ -351,7 +415,7 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
-  .topo, .ao-topo, .topo-ecra::after, .ao-topo::after { animation: none !important; }
+  .topo, .ao-topo, .topo-ecra::after, .ao-topo::after, .rodape a.vivo, .enviar { animation: none !important; }
   .topo-ecra::after, .ao-topo::after { display: none; }
 }
 
