@@ -217,7 +217,7 @@ img, svg { max-width: 100%; height: auto; }
 }
 .linguas li a, .linguas li span { display: block; text-align: right; padding: 0.45rem 0.7rem; border-radius: 0.45rem; text-decoration: none; }
 .linguas li a:hover { background: rgba(255, 255, 255, 0.07); }
-.linguas li span { color: var(--tinta); font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; } /* a língua escolhida: branca, em negrito e sublinhada (o Jesús, 25.10.2026) */
+.linguas li span { color: var(--tinta); text-decoration: underline; text-underline-offset: 0.2em; } /* a língua escolhida: branca e sublinhada (o Jesús, 25.10.2026) */
 .linguas ul :focus-visible { outline-color: var(--lilas); }
 
 /* Em todos os ecrãs, o topo sobe e desaparece quando se desce a página, e volta quando se sobe; e, depois de descer,
@@ -519,14 +519,15 @@ html:not(.com-js) .contacto-form { display: none; }
    o aviso de direitos). Não impede uma captura de ecrã: nada impede. */
 main img, .marca img { -webkit-touch-callout: none; -webkit-user-drag: none; user-select: none; }
 .aviso-direitos {
-  position: fixed; left: 50%; bottom: calc(var(--rodape-altura, 2.6rem) + 1rem); z-index: 1004;
-  transform: translate(-50%, 0.5rem); opacity: 0; pointer-events: none;
+  /* por cima da própria imagem, ao centro dela (src/imagens.js põe o sítio) */
+  position: fixed; left: 50%; top: 50%; z-index: 1004;
+  transform: translate(-50%, calc(-100% + 0.5rem)); opacity: 0; pointer-events: none;
   max-width: min(26rem, calc(100vw - 2rem)); padding: 0.6rem 1rem; border-radius: 0.6rem;
   background: var(--noite-2); color: var(--tinta); border: 1px solid var(--linha);
   font-family: var(--f-maquina); font-size: 0.78rem; text-align: center;
   box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4); transition: opacity 0.25s ease, transform 0.25s ease;
 }
-.aviso-direitos.visivel { opacity: 1; transform: translate(-50%, 0); }
+.aviso-direitos.visivel { opacity: 1; transform: translate(-50%, -100%); }
 
 /* O campo escondido do formulário (servidor/formulario/index.php): fora da vista e do teclado; só os robôs o
    preenchem. */

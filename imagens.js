@@ -12,7 +12,9 @@
 
   function imagem(alvo) { return alvo && alvo.closest && alvo.closest('main img, .marca img'); }
 
-  function avisar() {
+  // O aviso aparece por cima da própria imagem, ao centro dela (o Jesús, 25.10.2026); se não houver espaço por cima,
+  // fica junto ao cimo da imagem, por dentro, e nunca sai do ecrã.
+  function avisar(img) {
     if (!caixa) {
       caixa = document.createElement('div');
       caixa.className = 'aviso-direitos';
@@ -20,18 +22,24 @@
       document.body.appendChild(caixa);
     }
     caixa.textContent = AVISO[(document.documentElement.lang || 'pt').slice(0, 2)] || AVISO.pt;
+    var r = img.getBoundingClientRect(), metade = Math.min(caixa.offsetWidth / 2 + 8, window.innerWidth / 2);
+    var x = Math.min(Math.max(r.left + r.width / 2, metade), window.innerWidth - metade);
+    var y = Math.max(r.top - 8, caixa.offsetHeight + 8);
+    caixa.style.left = x + 'px';
+    caixa.style.top = y + 'px';
     caixa.classList.add('visivel');
     window.clearTimeout(apagar);
     apagar = window.setTimeout(function () { caixa.classList.remove('visivel'); }, 2800);
   }
 
-  document.addEventListener('contextmenu', function (e) { if (imagem(e.target)) { e.preventDefault(); avisar(); } });
-  document.addEventListener('dragstart', function (e) { if (imagem(e.target)) { e.preventDefault(); avisar(); } });
+  document.addEventListener('contextmenu', function (e) { var i = imagem(e.target); if (i) { e.preventDefault(); avisar(i); } });
+  document.addEventListener('dragstart', function (e) { var i = imagem(e.target); if (i) { e.preventDefault(); avisar(i); } });
   // No iPhone, o toque longo não chega como «contextmenu»: conta-se o tempo do dedo parado sobre a imagem.
   document.addEventListener('touchstart', function (e) {
-    if (!imagem(e.target)) return;
+    var i = imagem(e.target);
+    if (!i) return;
     window.clearTimeout(toque);
-    toque = window.setTimeout(avisar, 600);
+    toque = window.setTimeout(function () { avisar(i); }, 600);
   }, { passive: true });
   ['touchend', 'touchmove', 'touchcancel'].forEach(function (tipo) {
     document.addEventListener(tipo, function () { window.clearTimeout(toque); }, { passive: true });
