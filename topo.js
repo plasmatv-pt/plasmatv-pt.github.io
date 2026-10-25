@@ -1,5 +1,5 @@
 // O topo do site (o Jesús, 25.10.2026): o menu numa caixa no telemóvel, a escolha de língua, o cabeçalho que sobe e
-// desaparece quando se desce a página (no telemóvel) e volta quando se sobe, e o botão «ir ao topo».
+// desaparece quando se desce a página e volta quando se sobe, e o botão «ir ao topo» (estes dois, em todos os ecrãs).
 // Não guarda nada. Sem este ficheiro, o menu fica sempre à vista e a escolha de língua abre na mesma (é um <details>).
 (function () {
   var topo = document.querySelector('.topo');
@@ -43,7 +43,7 @@
   });
   if (estreito.addEventListener) estreito.addEventListener('change', function () { menu(false); });
 
-  // No telemóvel, o cabeçalho sobe ao descer a página e volta ao subir. Com o menu ou as línguas abertos, fica;
+  // Em todos os ecrãs, o cabeçalho sobe ao descer a página e volta ao subir. Com o menu ou as línguas abertos, fica;
   // e volta sempre que alguém lá chega com o teclado.
   var ultimo = Math.max(0, window.scrollY);
   var pedido = false;
@@ -54,10 +54,10 @@
     if (y <= 0) { topo.classList.remove('escondido'); ultimo = 0; }
     else if (Math.abs(d) > 6) {
       var ocupado = topo.classList.contains('aberto') || (linguas && linguas.open);
-      topo.classList.toggle('escondido', estreito.matches && d > 0 && y > topo.offsetHeight && !ocupado);
+      topo.classList.toggle('escondido', d > 0 && y > topo.offsetHeight && !ocupado);
       ultimo = y;
     }
-    if (subir) subir.classList.toggle('visivel', estreito.matches && y > window.innerHeight * 0.8);
+    if (subir) subir.classList.toggle('visivel', y > Math.min(window.innerHeight * 0.6, 480)); // depois de descer mais de meio ecrã (ou de 480 px)
   }
   window.addEventListener('scroll', function () {
     if (!pedido) { pedido = true; window.requestAnimationFrame(aoDeslocar); }
