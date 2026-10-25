@@ -347,6 +347,9 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
   border: 1px solid currentColor; border-radius: 999px; text-decoration: none;
 }
 .porta small { font-family: var(--f-maquina); font-size: 0.74rem; opacity: 0.8; white-space: nowrap; }
+/* Os nomes espaçados das portas (P L A S M A T E A T R O, L A B A R T A, V I S _ T A S) com os espaços mais curtos do
+   que uma letra inteira, para caberem na porta sem encolher a letra (o Jesús, 25.10.2026). */
+.porta small { word-spacing: -0.32em; }
 .porta.palco { color: var(--ocre); }
 .porta.ecra { color: var(--lilas); }
 .porta:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
@@ -502,7 +505,7 @@ html:not(.com-js) .contacto-form { display: none; }
 .album .data { font-family: var(--f-maquina); font-size: 0.8rem; color: var(--sombra); margin: 0.35rem 0 1rem; }
 .creditos-titulo { font-family: var(--f-maquina); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sombra); margin: 1.25rem 0 0.4rem !important; }
 .creditos { list-style: none; padding: 0; margin: 0 0 1rem; font-family: var(--f-maquina); font-size: 0.85rem; color: var(--tinta-2); }
-.ouvir, .ligacoes a { color: var(--lilas); }
+.ouvir, .ligacoes a { color: var(--tinta); } /* em branco, como as ligações das outras páginas (o Jesús, 25.10.2026) */
 .em-preparacao { font-family: var(--f-maquina); font-size: 0.85rem; color: var(--sombra); margin: 0.5rem 0 0; }
 .ligacoes { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
 
@@ -514,3 +517,13 @@ html:not(.com-js) .contacto-form { display: none; }
 /* O campo escondido do formulário (servidor/formulario/index.php): fora da vista e do teclado; só os robôs o
    preenchem. */
 .mel { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* As portas nos telemóveis estreitos: até 360 px, a letra dos nomes um pouco menor; abaixo de 340 px, as duas famílias
+   uma por cima da outra, para a porta do teatro ter largura para o nome inteiro. */
+@media (max-width: 23rem) {
+  .porta { padding-inline: 0.9rem; }
+  .porta small { font-size: 0.68rem; }
+}
+@media (max-width: 21.25rem) {
+  .porta { width: 10rem; }
+}

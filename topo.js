@@ -31,6 +31,13 @@
   // Abrir e fechar as caixas soa a um tique discreto (src/som.js); o fecho automático, à chegada, não soa.
   function soar(nome) { if (window.plasmatvSom) window.plasmatvSom.tocar(nome); }
 
+  // Uma ligação para a página onde já se está (src/transicao.js): o menu ou as línguas que estivessem abertos fecham-se.
+  document.addEventListener('plasmatv:mesma-pagina', function () {
+    if (!topo.classList.contains('aberto') && !(linguas && linguas.open)) return;
+    fecharTudo();
+    soar('fechar');
+  });
+
   if (botao) botao.addEventListener('click', function () {
     var abrir = botao.getAttribute('aria-expanded') !== 'true';
     if (linguas) linguas.open = false;

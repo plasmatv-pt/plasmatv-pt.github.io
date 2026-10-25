@@ -189,8 +189,23 @@
     })();
   }
 
+  // Uma ligação para a página onde já se está (sem âncora): não se recarrega; sobe-se ao cimo dela, e o menu fecha-se
+  // (o Jesús, 25.10.2026).
+  function aquiMesmo(alvo) {
+    var a = alvo && alvo.closest && alvo.closest('a[href]');
+    if (!a || a.target === '_blank' || a.hasAttribute('download')) return false;
+    var d = new URL(a.href, window.location.href);
+    return d.origin === window.location.origin && d.pathname === window.location.pathname && !d.hash;
+  }
+
   document.addEventListener('click', function (e) {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (aquiMesmo(e.target)) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: calmo ? 'auto' : 'smooth' });
+      document.dispatchEvent(new CustomEvent('plasmatv:mesma-pagina'));
+      return;
+    }
     var destino = interna(e.target);
     if (!destino) return;
     e.preventDefault();
