@@ -145,24 +145,25 @@ img, svg { max-width: 100%; height: auto; }
 .nav a { text-decoration: none; color: var(--barro); font-weight: 400; padding-block: 0.25rem; }
 .nav a:hover, .nav a[aria-current="page"] { text-decoration: underline; }
 
-/* A escolha de língua, como na VIS_TAS: uma caixa com as letras da língua, que abre a lista das outras. */
+/* A escolha de língua: as letras da língua sublinhadas, sem moldura (o Jesús, 25.10.2026), que abrem a lista de todas.
+   A lista tem a largura do nome mais comprido; a língua em que se está vai a lilás e sublinhada. */
 .linguas { position: relative; }
 .linguas summary {
   display: block; list-style: none; cursor: pointer; user-select: none;
-  font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; line-height: 1;
-  padding: 0.45rem 0.5rem 0.4rem; border: 2px solid var(--barro); border-radius: 0.55rem;
+  font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; line-height: 1;
+  padding: 0.5rem 0.2rem; text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px;
 }
 .linguas summary::-webkit-details-marker { display: none; }
-.linguas summary:hover, .linguas[open] summary { background: rgba(14, 12, 8, 0.1); }
+.linguas summary:hover, .linguas[open] summary { text-decoration-thickness: 2px; }
 .linguas ul {
   position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 5;
-  min-width: 9rem; margin: 0; padding: 0.35rem; list-style: none;
+  width: max-content; margin: 0; padding: 0.35rem; list-style: none;
   background: var(--noite-2); color: var(--tinta); font-size: 0.95rem;
   border: 1px solid var(--linha); border-radius: 0.75rem; box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.35);
 }
 .linguas li a, .linguas li span { display: block; text-align: right; padding: 0.45rem 0.7rem; border-radius: 0.45rem; text-decoration: none; }
 .linguas li a:hover { background: rgba(255, 255, 255, 0.07); }
-.linguas li span { color: var(--lilas); }
+.linguas li span { color: var(--lilas); text-decoration: underline; text-underline-offset: 0.2em; }
 .linguas ul :focus-visible { outline-color: var(--lilas); }
 
 /* O botão de três riscas e o «ir ao topo» só existem no telemóvel, e só com JavaScript (src/topo.js). */
@@ -305,17 +306,30 @@ body.palco .cabeca p { color: var(--barro); }
     color: var(--barro); border: 2px solid var(--barro); border-radius: 50%;
     background-color: var(--ocre); animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
     box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.35);
+    overflow: hidden;
     opacity: 0; visibility: hidden; transform: translateY(0.75rem);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
   }
   html.com-js .ao-topo.visivel { opacity: 1; visibility: visible; transform: none; }
+  /* O mesmo vidro do topo: as linhas de varrimento e a faixa de luz que desce (o Jesús, 25.10.2026). */
+  .ao-topo::before, .ao-topo::after { content: ""; position: absolute; pointer-events: none; }
+  .ao-topo::before {
+    inset: 0;
+    background: repeating-linear-gradient(to bottom, rgba(14, 12, 8, 0.12) 0 1px, transparent 1px 3px),
+                radial-gradient(circle at center, transparent 45%, rgba(14, 12, 8, 0.28) 100%);
+  }
+  .ao-topo::after {
+    left: 0; right: 0; top: -45%; height: 45%;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.22), transparent);
+    animation: varrimento 9s linear infinite; animation-delay: var(--fase-varrimento, 0s);
+  }
   .ao-topo svg { width: 1.25rem; height: 1.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
-  .topo, .ao-topo, .topo-ecra::after { animation: none !important; }
-  .topo-ecra::after { display: none; }
+  .topo, .ao-topo, .topo-ecra::after, .ao-topo::after { animation: none !important; }
+  .topo-ecra::after, .ao-topo::after { display: none; }
 }
 
 /* ——— labarta ——— */
