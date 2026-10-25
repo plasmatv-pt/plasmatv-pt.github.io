@@ -47,8 +47,9 @@
    estreitavam a janela e o logótipo e o menu saltavam de lado ao mudar de página. */
 html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 
-/* A passagem entre páginas (src/transicao.js): até a dissolução começar, a página nova fica tapada pela sua cor. */
-html.a-entrar body::after { content: ""; position: fixed; inset: 0; background: inherit; z-index: 1000; }
+/* A passagem entre páginas (src/transicao.js): até o chuvisco começar, o corpo da página nova fica a negro, como a
+   televisão entre dois canais. O topo fica por cima. */
+html.a-entrar body::after { content: ""; position: fixed; inset: 0; background: #0b0a0e; z-index: 1000; }
 
 body {
   margin: 0;
@@ -84,40 +85,64 @@ img, svg { max-width: 100%; height: auto; }
   padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
 }
 
-/* ——— topo ——— */
-.topo .envoltorio {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: 1rem 2rem; padding-block: 1.25rem;
-}
-.topo { position: relative; z-index: 1001; background: var(--noite); }
-
-/* O ecrã: o logótipo preto dentro de um ecrã de televisão antiga, com o dia e a noite a passarem devagar
-   (ocre e lilás), linhas de varrimento e uma faixa de luz que desce (o Jesús, 25.10.2026). */
-.marca { display: block; line-height: 0; text-decoration: none; }
-.ecra-tv {
-  position: relative; display: block; overflow: hidden;
-  padding: 0.55rem 0.85rem 0.6rem; border-radius: 1.1rem / 1.4rem;
+/* ——— topo ———
+   O cabeçalho inteiro é um ecrã de televisão antiga: o fundo passa devagar do ocre ao lilás e volta, como o dia e a
+   noite (90 s), com linhas de varrimento e uma faixa de luz que desce; o logótipo e o menu em preto, de dia e de noite
+   (o Jesús, 25.10.2026). É igual em todas as páginas e fica por cima da passagem entre elas: muda só o corpo. */
+.topo {
+  position: relative; z-index: 1001; color: var(--barro);
   background-color: var(--ocre);
   animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
-  box-shadow: 0 0 0 3px #2a2733, 0 0 0 5px #0d0c12, inset 0 0 1.2rem rgba(14, 12, 8, 0.45);
+  box-shadow: 0 1px 0 rgba(14, 12, 8, 0.35);
 }
-.ecra-tv img { position: relative; z-index: 1; display: block; width: 7.5rem; }
-.ecra-tv::before {
-  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: repeating-linear-gradient(to bottom, rgba(14, 12, 8, 0.1) 0 1px, transparent 1px 3px),
-              radial-gradient(ellipse at center, transparent 55%, rgba(14, 12, 8, 0.35) 100%);
+/* O vidro: por cima do logótipo e do menu (que não têm posição), por baixo da caixa das línguas. Não apanha cliques. */
+.topo-ecra { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.topo-ecra::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(to bottom, rgba(14, 12, 8, 0.09) 0 1px, transparent 1px 3px),
+              radial-gradient(ellipse at center, transparent 60%, rgba(14, 12, 8, 0.2) 100%);
 }
-.ecra-tv::after {
-  content: ""; position: absolute; left: 0; right: 0; top: -45%; height: 45%; z-index: 3; pointer-events: none;
+.topo-ecra::after {
+  content: ""; position: absolute; left: 0; right: 0; top: -45%; height: 45%;
   background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.16), transparent);
   animation: varrimento 9s linear infinite; animation-delay: var(--fase-varrimento, 0s);
 }
-.marca:hover .ecra-tv, .marca:focus-visible .ecra-tv { box-shadow: 0 0 0 3px #3a3646, 0 0 0 5px #0d0c12, inset 0 0 1.2rem rgba(14, 12, 8, 0.35), 0 0 1.4rem rgba(169, 156, 255, 0.25); }
 @keyframes dia-noite { 0%, 100% { background-color: var(--ocre); } 50% { background-color: var(--lilas); } }
 @keyframes varrimento { from { transform: translateY(0); } to { transform: translateY(330%); } }
-.nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-size: 0.95rem; }
-.nav a { text-decoration: none; color: var(--tinta-2); padding-block: 0.25rem; }
-.nav a:hover, .nav a[aria-current="page"] { color: var(--tinta); text-decoration: underline; }
+
+.topo .envoltorio {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 0.75rem 1.75rem; padding-block: 1rem;
+}
+.topo :focus-visible { outline-color: var(--barro); }
+.marca { display: block; margin-right: auto; line-height: 0; text-decoration: none; }
+.marca img { display: block; width: 8rem; }
+.nav-itens { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-size: 0.95rem; }
+.nav a { text-decoration: none; color: var(--barro); font-weight: 400; padding-block: 0.25rem; }
+.nav a:hover, .nav a[aria-current="page"] { text-decoration: underline; }
+
+/* A escolha de língua, como na VIS_TAS: uma caixa com as letras da língua, que abre a lista das outras. */
+.linguas { position: relative; }
+.linguas summary {
+  display: block; list-style: none; cursor: pointer; user-select: none;
+  font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; line-height: 1;
+  padding: 0.45rem 0.5rem 0.4rem; border: 2px solid var(--barro); border-radius: 0.55rem;
+}
+.linguas summary::-webkit-details-marker { display: none; }
+.linguas summary:hover, .linguas[open] summary { background: rgba(14, 12, 8, 0.1); }
+.linguas ul {
+  position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 5;
+  min-width: 9rem; margin: 0; padding: 0.35rem; list-style: none;
+  background: var(--noite-2); color: var(--tinta); font-size: 0.95rem;
+  border: 1px solid var(--linha); border-radius: 0.75rem; box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.35);
+}
+.linguas li a, .linguas li span { display: block; padding: 0.45rem 0.7rem; border-radius: 0.45rem; text-decoration: none; }
+.linguas li a:hover { background: rgba(255, 255, 255, 0.07); }
+.linguas li span { color: var(--lilas); }
+.linguas ul :focus-visible { outline-color: var(--lilas); }
+
+/* O botão de três riscas e o «ir ao topo» só existem no telemóvel, e só com JavaScript (src/topo.js). */
+.menu-botao, .ao-topo { display: none; }
 
 main { flex: 1; }
 
@@ -211,10 +236,58 @@ body.palco .cabeca p { color: var(--barro); }
   .lista dd { margin-bottom: 0.8rem; }
 }
 
+/* ——— telemóvel: o menu numa caixa, o cabeçalho que sobe ao descer e volta ao subir, e o «ir ao topo» ——— */
+@media (max-width: 48rem) {
+  .topo { position: sticky; top: 0; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
+  .topo.escondido { transform: translateY(calc(-100% - 2px)); }
+  .topo .envoltorio { row-gap: 0; padding-block: 0.8rem; }
+  .marca img { width: 7rem; }
+
+  html.com-js .menu-botao {
+    display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; padding: 0; cursor: pointer;
+    color: var(--barro); background: transparent; border: 2px solid var(--barro); border-radius: 0.55rem;
+  }
+  .riscas, .riscas::before, .riscas::after {
+    display: block; width: 1.1rem; height: 2px; border-radius: 1px; background: currentColor;
+    transition: transform 0.3s ease, background-color 0.2s ease;
+  }
+  .riscas { position: relative; }
+  .riscas::before, .riscas::after { content: ""; position: absolute; left: 0; }
+  .riscas::before { top: -6px; }
+  .riscas::after { top: 6px; }
+  .topo.aberto .riscas { background-color: transparent; }
+  .topo.aberto .riscas::before { transform: translateY(6px) rotate(45deg); }
+  .topo.aberto .riscas::after { transform: translateY(-6px) rotate(-45deg); }
+
+  /* O menu abre-se por baixo da linha do logótipo, dentro do mesmo ecrã. */
+  html.com-js .nav {
+    order: 3; flex-basis: 100%; display: grid; grid-template-rows: 0fr; visibility: hidden;
+    transition: grid-template-rows 0.35s ease, visibility 0.35s;
+  }
+  html.com-js .topo.aberto .nav { grid-template-rows: 1fr; visibility: visible; }
+  html.com-js .nav-itens { min-height: 0; overflow: hidden; display: grid; gap: 0; font-family: var(--f-titulo); font-size: 1.5rem; }
+  html.com-js .nav-itens a { padding-block: 0.45rem; }
+  html.com-js .nav-itens a:first-child { margin-top: 0.75rem; }
+  html.com-js .nav-itens a:last-child { margin-bottom: 0.5rem; }
+
+  html.com-js .ao-topo {
+    display: grid; place-items: center; position: fixed; z-index: 999;
+    right: max(1rem, env(safe-area-inset-right, 0px)); bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    width: 3rem; height: 3rem; padding: 0; cursor: pointer;
+    color: var(--barro); border: 2px solid var(--barro); border-radius: 50%;
+    background-color: var(--ocre); animation: dia-noite 90s ease-in-out infinite; animation-delay: var(--fase-dia, 0s);
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.35);
+    opacity: 0; visibility: hidden; transform: translateY(0.75rem);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  }
+  html.com-js .ao-topo.visivel { opacity: 1; visibility: visible; transform: none; }
+  .ao-topo svg { width: 1.25rem; height: 1.25rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
-  .ecra-tv, .ecra-tv::after { animation: none; }
-  .ecra-tv::after { display: none; }
+  .topo, .ao-topo, .topo-ecra::after { animation: none !important; }
+  .topo-ecra::after { display: none; }
 }
 
 /* ——— labarta ——— */

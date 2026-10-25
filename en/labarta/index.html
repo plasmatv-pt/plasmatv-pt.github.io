@@ -10,22 +10,36 @@
   <link rel="canonical" href="https://plasmatv.pt/en/labarta/">
   <link rel="alternate" hreflang="pt" href="https://plasmatv.pt/labarta/">
   <link rel="alternate" hreflang="en" href="https://plasmatv.pt/en/labarta/">
+  <link rel="alternate" hreflang="es" href="https://plasmatv.pt/es/labarta/">
   <link rel="alternate" hreflang="x-default" href="https://plasmatv.pt/labarta/">
   <link rel="preload" href="/fontes/alexandria-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/estilo.css">
   <script src="/transicao.js"></script>
+  <script src="/topo.js" defer></script>
 </head>
 <body>
   <a class="saltar" href="#conteudo">Skip to content</a>
   <header class="topo">
+    <span class="topo-ecra" aria-hidden="true"></span>
     <div class="envoltorio">
-      <a class="marca" href="/en/" aria-label="plasmatv — home"><span class="ecra-tv"><img src="/img/logo-plasmatv.png" alt="plasmatv" width="840" height="391"></span></a>
-      <nav class="nav" aria-label="Main navigation">
-        <a href="/en/teatro/">theatre</a>
-        <a href="/en/ecra/">screen</a>
-        <a href="/en/estudio/">studio</a>
-        <a href="/en/labarta/" aria-current="page">labarta</a>
+      <a class="marca" href="/en/" aria-label="plasmatv — home"><img src="/img/logo-plasmatv.png" alt="plasmatv" width="840" height="391"></a>
+      <nav class="nav" id="menu" aria-label="Main navigation">
+        <div class="nav-itens">
+          <a href="/en/teatro/">theatre</a>
+          <a href="/en/ecra/">screen</a>
+          <a href="/en/estudio/">studio</a>
+          <a href="/en/labarta/" aria-current="page">labarta</a>
+        </div>
       </nav>
+      <details class="linguas">
+        <summary aria-label="language: english"><span aria-hidden="true">EN</span></summary>
+        <ul>
+          <li><a href="/labarta/" hreflang="pt" lang="pt">português</a></li>
+          <li><span aria-current="true">english</span></li>
+          <li><a href="/es/labarta/" hreflang="es" lang="es">español</a></li>
+        </ul>
+      </details>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu" aria-label="menu"><span class="riscas" aria-hidden="true"></span></button>
     </div>
   </header>
   <main id="conteudo">
@@ -99,8 +113,9 @@
       <span>contacto@plasmatv.pt</span>
       <a href="/en/privacidade/">privacy</a>
       <span>© 2026 plasmatv</span>
-      <nav aria-label="Languages"><a href="/labarta/" hreflang="pt" lang="pt">português</a> · <span aria-current="true">english</span></nav>
+      <nav aria-label="Languages"><a href="/labarta/" hreflang="pt" lang="pt">português</a> · <span aria-current="true">english</span> · <a href="/es/labarta/" hreflang="es" lang="es">español</a></nav>
     </div>
   </footer>
+  <button class="ao-topo" type="button" aria-label="back to top"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </body>
 </html>

@@ -10,22 +10,36 @@
   <link rel="canonical" href="https://plasmatv.pt/estudio/">
   <link rel="alternate" hreflang="pt" href="https://plasmatv.pt/estudio/">
   <link rel="alternate" hreflang="en" href="https://plasmatv.pt/en/estudio/">
+  <link rel="alternate" hreflang="es" href="https://plasmatv.pt/es/estudio/">
   <link rel="alternate" hreflang="x-default" href="https://plasmatv.pt/estudio/">
   <link rel="preload" href="/fontes/alexandria-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/estilo.css">
   <script src="/transicao.js"></script>
+  <script src="/topo.js" defer></script>
 </head>
 <body>
   <a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
   <header class="topo">
+    <span class="topo-ecra" aria-hidden="true"></span>
     <div class="envoltorio">
-      <a class="marca" href="/" aria-label="plasmatv — início"><span class="ecra-tv"><img src="/img/logo-plasmatv.png" alt="plasmatv" width="840" height="391"></span></a>
-      <nav class="nav" aria-label="Navegação principal">
-        <a href="/teatro/">teatro</a>
-        <a href="/ecra/">ecrã</a>
-        <a href="/estudio/" aria-current="page">estúdio</a>
-        <a href="/labarta/">labarta</a>
+      <a class="marca" href="/" aria-label="plasmatv — início"><img src="/img/logo-plasmatv.png" alt="plasmatv" width="840" height="391"></a>
+      <nav class="nav" id="menu" aria-label="Navegação principal">
+        <div class="nav-itens">
+          <a href="/teatro/">teatro</a>
+          <a href="/ecra/">ecrã</a>
+          <a href="/estudio/" aria-current="page">estúdio</a>
+          <a href="/labarta/">labarta</a>
+        </div>
       </nav>
+      <details class="linguas">
+        <summary aria-label="língua: português"><span aria-hidden="true">PT</span></summary>
+        <ul>
+          <li><span aria-current="true">português</span></li>
+          <li><a href="/en/estudio/" hreflang="en" lang="en">english</a></li>
+          <li><a href="/es/estudio/" hreflang="es" lang="es">español</a></li>
+        </ul>
+      </details>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu" aria-label="menu"><span class="riscas" aria-hidden="true"></span></button>
     </div>
   </header>
   <main id="conteudo">
@@ -57,8 +71,9 @@
       <span>contacto@plasmatv.pt</span>
       <a href="/privacidade/">privacidade</a>
       <span>© 2026 plasmatv</span>
-      <nav aria-label="Línguas"><span aria-current="true">português</span> · <a href="/en/estudio/" hreflang="en" lang="en">english</a></nav>
+      <nav aria-label="Línguas"><span aria-current="true">português</span> · <a href="/en/estudio/" hreflang="en" lang="en">english</a> · <a href="/es/estudio/" hreflang="es" lang="es">español</a></nav>
     </div>
   </footer>
+  <button class="ao-topo" type="button" aria-label="ir ao topo"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </body>
 </html>
