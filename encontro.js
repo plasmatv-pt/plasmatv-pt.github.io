@@ -1,13 +1,14 @@
 // O encontro: duas famílias de pontos, ocres (o corpo, o palco) e lilases (o código, o ecrã).
 // As linhas desenham-se só entre um ponto de cada família, quando se aproximam. Entre iguais, nunca.
 // Com «reduzir movimento», desenha-se uma vez e fica quieto.
+// Carrega em todas as páginas: como a página não se desmonta (src/transicao.js), a constelação acorda quando se chega
+// à página inicial e adormece quando se sai dela (o aviso «plasmatv:pagina»).
 (function () {
-  var c = document.getElementById('encontro');
-  if (!c || !c.getContext) return;
-  var ctx = c.getContext('2d');
+  var c = null, ctx = null;
   var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var OCRE = [200, 134, 10], LILAS = [169, 156, 255];
   var pts = [], W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2), visivel = true;
+  var observador = null, aCorrer = false;
 
   function semente(n) { var x = Math.sin(n * 9301 + 49297) * 233280; return x - Math.floor(x); }
   function cor(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
@@ -60,14 +61,28 @@
   }
 
   function ciclo() {
+    if (!c) { aCorrer = false; return; } // já não há constelação nesta página: o ciclo pára
     if (visivel && !document.hidden) { mover(); desenhar(); }
     window.requestAnimationFrame(ciclo);
   }
 
-  medir(); desenhar();
-  window.addEventListener('resize', function () { medir(); desenhar(); });
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (e) { visivel = e[0].isIntersecting; }).observe(c);
+  function iniciar() {
+    var novo = document.getElementById('encontro');
+    if (novo === c) return;
+    if (observador) { observador.disconnect(); observador = null; }
+    c = novo && novo.getContext ? novo : null;
+    pts = []; W = 0; H = 0; visivel = true;
+    if (!c) return;
+    ctx = c.getContext('2d');
+    medir(); desenhar();
+    if ('IntersectionObserver' in window) {
+      observador = new IntersectionObserver(function (e) { visivel = e[0].isIntersecting; });
+      observador.observe(c);
+    }
+    if (!calmo && !aCorrer) { aCorrer = true; window.requestAnimationFrame(ciclo); }
   }
-  if (!calmo) window.requestAnimationFrame(ciclo);
+
+  window.addEventListener('resize', function () { if (c) { medir(); desenhar(); } });
+  document.addEventListener('plasmatv:pagina', iniciar);
+  iniciar();
 })();

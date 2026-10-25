@@ -331,9 +331,9 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
   .riscas::before, .riscas::after { content: ""; position: absolute; left: 0; }
   .riscas::before { top: -6px; }
   .riscas::after { top: 6px; }
-  .topo.aberto .riscas, html.menu-vinha-aberto .riscas { background-color: transparent; }
-  .topo.aberto .riscas::before, html.menu-vinha-aberto .riscas::before { transform: translateY(6px) rotate(45deg); }
-  .topo.aberto .riscas::after, html.menu-vinha-aberto .riscas::after { transform: translateY(-6px) rotate(-45deg); }
+  .topo.aberto .riscas { background-color: transparent; }
+  .topo.aberto .riscas::before { transform: translateY(6px) rotate(45deg); }
+  .topo.aberto .riscas::after { transform: translateY(-6px) rotate(-45deg); }
 
   /* O menu abre-se por baixo da linha do logótipo, dentro do mesmo ecrã. */
   html.com-js .nav {
@@ -341,9 +341,6 @@ h1, h2, h3 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; 
     transition: grid-template-rows 0.35s ease, visibility 0.35s;
   }
   html.com-js .topo.aberto .nav { grid-template-rows: 1fr; visibility: visible; }
-  /* Quem escolheu a página no menu aberto encontra-o aberto na página nova, e ele fecha-se com o mesmo movimento com
-     que abriu, em vez de desaparecer de repente (o Jesús, 25.10.2026; src/transicao.js e src/topo.js). */
-  html.com-js.menu-vinha-aberto .nav { grid-template-rows: 1fr; visibility: visible; }
   /* As opções alinham à direita, por baixo do botão que as abre (o Jesús, 25.10.2026). */
   html.com-js .nav-itens { min-height: 0; overflow: hidden; display: grid; justify-items: end; gap: 0; font-family: var(--f-titulo); font-size: 1.5rem; text-align: right; }
   html.com-js .nav-itens a { padding-block: 0.45rem; }

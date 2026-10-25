@@ -19,13 +19,14 @@
     if (linguas) linguas.open = false;
   }
 
-  // Vindo de uma escolha no menu aberto (src/transicao.js), o menu chega aberto e fecha-se com o mesmo movimento com
-  // que abre, quando o chuvisco começa a ir-se.
-  if (document.documentElement.classList.contains('menu-vinha-aberto')) {
-    window.requestAnimationFrame(function () {
-      window.setTimeout(function () { document.documentElement.classList.remove('menu-vinha-aberto'); }, 160);
-    });
-  }
+  // Página nova (src/transicao.js): o topo à vista e, quando o chuvisco começa a ir-se, o menu ou as línguas que
+  // estivessem abertos fecham-se com o mesmo movimento com que abrem (sem tique: não foi a pessoa a fechar).
+  document.addEventListener('plasmatv:pagina', function () {
+    topo.classList.remove('escondido');
+    ultimo = Math.max(0, window.scrollY);
+    window.setTimeout(fecharTudo, 160);
+    aoDeslocar();
+  });
 
   // Abrir e fechar as caixas soa a um tique discreto (src/som.js); o fecho automático, à chegada, não soa.
   function soar(nome) { if (window.plasmatvSom) window.plasmatvSom.tocar(nome); }
