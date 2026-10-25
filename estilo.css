@@ -47,9 +47,33 @@
    estreitavam a janela e o logótipo e o menu saltavam de lado ao mudar de página. */
 html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 
-/* A passagem entre páginas (src/transicao.js): até o chuvisco começar, o corpo da página nova fica a negro, como a
-   televisão entre dois canais. O topo fica por cima. */
-html.a-entrar body::after { content: ""; position: fixed; inset: 0; background: #0b0a0e; z-index: 1000; }
+/* A passagem entre páginas (src/transicao.js): uma mudança de canal. O chuvisco é uma imagem de grão que salta de
+   sítio a cada instante (::before), com faixas escuras a rolar por cima (::after). À saída, vem e fica vivo até a página
+   nova chegar, por mais que a rede demore; a página nova já nasce com ele (só CSS, sem esperar pelo JavaScript) e
+   deixa-o ir. O topo fica por cima: muda só o corpo. */
+html.a-sair body::before, html.a-entrar body::before,
+html.a-sair body::after, html.a-entrar body::after {
+  content: ""; position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+}
+html.a-sair body::before, html.a-entrar body::before {
+  background: #4a4950 url("/img/chuvisco.png") 0 0 / 384px 384px repeat;
+  image-rendering: pixelated;
+}
+html.a-sair body::after, html.a-entrar body::after {
+  background: repeating-linear-gradient(to bottom, rgba(8, 7, 10, 0) 0, rgba(8, 7, 10, 0.45) 22%, rgba(8, 7, 10, 0) 45%, rgba(255, 255, 255, 0.06) 47%, rgba(8, 7, 10, 0) 49%) 0 0 / 100% 60vh;
+}
+html.a-sair body::before { animation: chuvisco-salta 0.3s steps(1) infinite, chuvisco-vem 0.24s ease-out both; }
+html.a-sair body::after { animation: faixas-rolam 0.7s linear infinite, chuvisco-vem 0.24s ease-out both; }
+html.a-sair body { pointer-events: none; }
+html.a-entrar body::before { animation: chuvisco-salta 0.3s steps(1) infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
+html.a-entrar body::after { animation: faixas-rolam 0.7s linear infinite, chuvisco-vai 0.42s ease-in 0.14s both; }
+@keyframes chuvisco-salta {
+  0% { background-position: 0 0; } 17% { background-position: -123px -57px; } 33% { background-position: -246px -201px; }
+  50% { background-position: -81px -294px; } 67% { background-position: -312px -36px; } 83% { background-position: -177px -267px; }
+}
+@keyframes faixas-rolam { from { background-position: 0 0; } to { background-position: 0 -60vh; } }
+@keyframes chuvisco-vem { from { opacity: 0; } to { opacity: 1; } }
+@keyframes chuvisco-vai { from { opacity: 1; } to { opacity: 0; } }
 
 body {
   margin: 0;
@@ -265,7 +289,8 @@ body.palco .cabeca p { color: var(--barro); }
     transition: grid-template-rows 0.35s ease, visibility 0.35s;
   }
   html.com-js .topo.aberto .nav { grid-template-rows: 1fr; visibility: visible; }
-  html.com-js .nav-itens { min-height: 0; overflow: hidden; display: grid; gap: 0; font-family: var(--f-titulo); font-size: 1.5rem; }
+  /* As opções alinham à direita, por baixo do botão que as abre (o Jesús, 25.10.2026). */
+  html.com-js .nav-itens { min-height: 0; overflow: hidden; display: grid; justify-items: end; gap: 0; font-family: var(--f-titulo); font-size: 1.5rem; text-align: right; }
   html.com-js .nav-itens a { padding-block: 0.45rem; }
   html.com-js .nav-itens a:first-child { margin-top: 0.75rem; }
   html.com-js .nav-itens a:last-child { margin-bottom: 0.5rem; }
