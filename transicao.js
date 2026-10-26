@@ -84,7 +84,9 @@
 
     document.title = novo.title;
     raiz.lang = novo.documentElement.lang;
-    ['meta[name="description"]', 'link[rel="canonical"]'].forEach(function (sel) {
+    // Os ícones do separador também: a LABARTA tem o seu (o disco).
+    ['meta[name="description"]', 'link[rel="canonical"]', 'link[rel="icon"][sizes="48x48"]', 'link[rel="icon"][sizes="192x192"]',
+      'link[rel="apple-touch-icon"]'].forEach(function (sel) {
       var a = document.head.querySelector(sel), b = novo.head.querySelector(sel);
       if (a && b) a.replaceWith(document.importNode(b, true));
     });
