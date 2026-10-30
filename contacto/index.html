@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self' https://formulario.plasmatv.pt; object-src 'none'; base-uri 'self'; form-action https://formulario.plasmatv.pt">
   <meta name="referrer" content="no-referrer">
   <title>contacto — plasmatv</title>
   <meta name="description" content="Escrever ao estúdio plasmatv.">
@@ -71,7 +71,10 @@
         <h1>contacto</h1>
         <p>Para escrever ao estúdio, preenche os quatro campos: são todos precisos.</p>
       </header>
-      <form class="contacto-form coluna" data-para="contacto@plasmatv.pt">
+      <form class="contacto-form coluna" action="https://formulario.plasmatv.pt/" method="post" data-servidor data-a-enviar="A enviar…" data-falhou="A mensagem não seguiu. Escreve diretamente para contacto@plasmatv.pt, por favor.">
+        <input type="hidden" name="lingua" value="pt">
+        <input type="hidden" name="t" value="">
+        <div class="mel" aria-hidden="true"><label>Não preencher este campo: <input name="sitio" tabindex="-1" autocomplete="off"></label></div>
         <label class="campo">
           <span>nome</span>
           <input name="nome" type="text" autocomplete="name" maxlength="120" required>
@@ -88,7 +91,7 @@
           <span>mensagem</span>
           <textarea name="mensagem" rows="7" maxlength="4000" required></textarea>
         </label>
-        <p class="nota">Ao carregar em «enviar», abre-se a tua aplicação de email com a mensagem pronta, e é de lá que ela parte. O site não vê nem guarda o que escreves.</p>
+        <p class="nota">Ao carregar em «enviar», a mensagem segue pelo servidor do estúdio, na dominios.pt (o mesmo onde vive o nosso email), diretamente para contacto@plasmatv.pt. O servidor não a guarda: entrega-a.</p>
         <button class="enviar" type="submit">enviar</button>
         <p class="aviso" role="status" hidden>Se a tua aplicação de email não abriu, podes escrever diretamente para <a href="mailto:contacto@plasmatv.pt">contacto@plasmatv.pt</a>.</p>
       </form>

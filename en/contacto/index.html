@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self' https://formulario.plasmatv.pt; object-src 'none'; base-uri 'self'; form-action https://formulario.plasmatv.pt">
   <meta name="referrer" content="no-referrer">
   <title>contact — plasmatv</title>
   <meta name="description" content="Write to the plasmatv studio.">
@@ -71,7 +71,10 @@
         <h1>contact</h1>
         <p>To write to the studio, fill in the four fields: all of them are needed.</p>
       </header>
-      <form class="contacto-form coluna" data-para="contacto@plasmatv.pt">
+      <form class="contacto-form coluna" action="https://formulario.plasmatv.pt/" method="post" data-servidor data-a-enviar="Sending…" data-falhou="The message did not go through. Please write directly to contacto@plasmatv.pt.">
+        <input type="hidden" name="lingua" value="en">
+        <input type="hidden" name="t" value="">
+        <div class="mel" aria-hidden="true"><label>Do not fill in this field: <input name="sitio" tabindex="-1" autocomplete="off"></label></div>
         <label class="campo">
           <span>name</span>
           <input name="nome" type="text" autocomplete="name" maxlength="120" required>
@@ -88,7 +91,7 @@
           <span>message</span>
           <textarea name="mensagem" rows="7" maxlength="4000" required></textarea>
         </label>
-        <p class="nota">When you press “send”, your email app opens with the message ready, and it is sent from there. The site neither sees nor stores what you write.</p>
+        <p class="nota">When you press “send”, the message goes through the studio’s server, at dominios.pt (the same one where our email lives), straight to contacto@plasmatv.pt. The server does not store it: it delivers it.</p>
         <button class="enviar" type="submit">send</button>
         <p class="aviso" role="status" hidden>If your email app did not open, you can write directly to <a href="mailto:contacto@plasmatv.pt">contacto@plasmatv.pt</a>.</p>
       </form>
