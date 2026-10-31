@@ -99,10 +99,10 @@
     // No topo, só o que muda de página para página: ligações, nomes e línguas. O resto continua como está.
     var par = function (sel) { return [topo.querySelector(sel), topoNovo.querySelector(sel)]; };
     [['.marca', ['href', 'aria-label']], ['.nav', ['aria-label']], ['.menu-botao', ['aria-label']],
-      ['.linguas summary', ['aria-label']], ['.som', ['aria-label']]].forEach(function (x) {
+      ['.linguas summary', ['aria-label']], ['.som', ['aria-label']], ['.apoiar', ['href', 'aria-current']]].forEach(function (x) {
       var p = par(x[0]); if (p[0] && p[1]) atributos(p[0], p[1], x[1]);
     });
-    ['.nav-itens', '.linguas summary', '.linguas ul'].forEach(function (sel) {
+    ['.nav-itens', '.linguas summary', '.linguas ul', '.apoiar'].forEach(function (sel) {
       var p = par(sel); if (p[0] && p[1]) p[0].innerHTML = p[1].innerHTML;
     });
     [['.saltar', ['href']], ['.ao-topo', ['aria-label']]].forEach(function (x) {
